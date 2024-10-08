@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Combatant
-{	
+public class PlayerCombatant : Combatant
+{
 	public override float dealDmg()
 	{
 		Debug.Log("Player");

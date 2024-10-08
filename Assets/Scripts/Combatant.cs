@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
-public class Combatant : MonoBehaviour
+public class Combatant : SerializedMonoBehaviour
 {
     [SerializeField]
     protected int lvl = 1;
