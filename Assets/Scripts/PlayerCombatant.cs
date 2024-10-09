@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCombatant : Combatant
 {
-	public override float dealDmg()
+	public override float DealDmg()
 	{
 		Debug.Log("Player");
 		//Play the animation, describe what happened in text

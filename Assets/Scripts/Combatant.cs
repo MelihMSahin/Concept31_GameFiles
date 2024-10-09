@@ -29,7 +29,7 @@ public class Combatant : SerializedMonoBehaviour
         
     }
 
-    public bool takeDamage(float dmg)
+    public bool TakeDamage(float dmg)
 	{
         healthPoints -= dmg;
         if (healthPoints <= 0)
@@ -41,7 +41,7 @@ public class Combatant : SerializedMonoBehaviour
         return false;
 	}
 
-    public virtual float dealDmg()
+    public virtual float DealDmg()
 	{
         Debug.Log("Combatant");
         //Play the animation, describe what happened in text
