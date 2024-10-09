@@ -29,7 +29,7 @@ public class Combatant : SerializedMonoBehaviour
         
     }
 
-    public bool takeDamage(float dmg)
+    public bool TakeDamage(float dmg)
 	{
         healthPoints -= dmg;
         if (healthPoints <= 0)
