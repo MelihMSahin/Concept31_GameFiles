@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 120079804}
   - component: {fileID: 120079803}
   - component: {fileID: 120079802}
+  - component: {fileID: 120079806}
   m_Layer: 0
   m_Name: PlayerCombatant3
   m_TagString: Untagged
@@ -227,6 +228,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 811151382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &120079806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120079801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919107878922fe04cb5e56fbf529cd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  lvl: 1
+  experiencePoints: 0
+  healthPoints: 100
+  attackPower: 20
+  agility: 10
 --- !u!1 &271988636
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,9 +465,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 333261119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bacbbbc92f9dff94a9889eae57ad5478, type: 3}
+  m_Script: {fileID: 11500000, guid: 919107878922fe04cb5e56fbf529cd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   lvl: 1
   experiencePoints: 0
   healthPoints: 100
@@ -566,6 +602,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea79acce0a6ff04ca3881df619bf105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   lvl: 1
   experiencePoints: 0
   healthPoints: 100
@@ -691,6 +736,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea79acce0a6ff04ca3881df619bf105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   lvl: 1
   experiencePoints: 0
   healthPoints: 100
@@ -813,9 +867,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 752877303}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bacbbbc92f9dff94a9889eae57ad5478, type: 3}
+  m_Script: {fileID: 11500000, guid: 919107878922fe04cb5e56fbf529cd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   lvl: 1
   experiencePoints: 0
   healthPoints: 100
@@ -830,6 +893,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 811151382}
+  - component: {fileID: 811151383}
   m_Layer: 0
   m_Name: Combatants
   m_TagString: Untagged
@@ -858,6 +922,48 @@ Transform:
   - {fileID: 522904807}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &811151383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811151381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca7943901582814795ea500352bdcfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: combatantDict
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Combatant,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  combatantParent: {fileID: 811151381}
 --- !u!1 &1196343159
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,6 +1084,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea79acce0a6ff04ca3881df619bf105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   lvl: 1
   experiencePoints: 0
   healthPoints: 100
@@ -994,7 +1109,6 @@ GameObject:
   - component: {fileID: 1467915499}
   - component: {fileID: 1467915498}
   - component: {fileID: 1467915497}
-  - component: {fileID: 1467915500}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1076,30 +1190,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!114 &1467915500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467915496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ca7943901582814795ea500352bdcfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  hp: 10
-  combatantParent: {fileID: 811151381}
-  combatants: []
 --- !u!1 &1772053336
 GameObject:
   m_ObjectHideFlags: 0
