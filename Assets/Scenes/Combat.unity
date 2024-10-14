@@ -253,7 +253,7 @@ MonoBehaviour:
   experiencePoints: 0
   healthPoints: 100
   attackPower: 20
-  agility: 10
+  agility: 40
 --- !u!1 &271988636
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,7 +481,7 @@ MonoBehaviour:
   experiencePoints: 0
   healthPoints: 100
   attackPower: 20
-  agility: 10
+  agility: 50
 --- !u!1 &522904803
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,7 +749,7 @@ MonoBehaviour:
   experiencePoints: 0
   healthPoints: 100
   attackPower: 20
-  agility: 10
+  agility: 20
 --- !u!1 &752877303
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,7 +883,7 @@ MonoBehaviour:
   experiencePoints: 0
   healthPoints: 100
   attackPower: 20
-  agility: 10
+  agility: 60
 --- !u!1 &811151381
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,25 +943,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: combatantDict
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Combatant,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
+    - Name: combatants
+      Entry: 6
       Data: 
   combatantParent: {fileID: 811151381}
 --- !u!1 &1196343159
@@ -1097,7 +1080,7 @@ MonoBehaviour:
   experiencePoints: 0
   healthPoints: 100
   attackPower: 20
-  agility: 10
+  agility: 30
 --- !u!1 &1467915496
 GameObject:
   m_ObjectHideFlags: 0
