@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerCombatant : Combatant
 {
+	private void Awake()
+	{
+		isAlly = true;
+	}
+
 	public override float DealDmg()
 	{
 		Debug.Log("Player");
