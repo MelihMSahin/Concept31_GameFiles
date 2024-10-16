@@ -36,14 +36,22 @@ public class TurnManager : SerializedMonoBehaviour
     }
 
     void FixedUpdate()
+    { 
+        if (Input.GetKeyDown("space"))
+		{
+            Combatant temp;
+            combatantDict.TryGetValue("Ally1", out temp);
+            temp.takeDamage(10);
+		}
+
+		switch (turnState)
     {
 		while (turnState == TurnState.COMBAT)
 		{
             Combatant nextAttacker = NextAttacker();
-			//attack()
+			      //attack()
 		}
 	}
-
     public Combatant NextAttacker()
 	{
         Combatant nextAttacker = null;

@@ -11,20 +11,22 @@ public class Combatant : SerializedMonoBehaviour
     [SerializeField]
     protected float experiencePoints = 0f;
     [SerializeField]
-    protected float healthPoints = 100f;
+    protected float health = 100f;
+    protected float healthMax = 100f; 
     [SerializeField]
     protected float attackPower = 20f;
-	[SerializeField]
-	private float agility = 10f;
+	  [SerializeField]
+	  private float agility = 10f;
     [SerializeField]
     protected bool isAlly = false;
     [SerializeField]
     private bool hasAttacked = false;
 
-	// Start is called before the first frame update
-	void Start()
+	  // Start is called before the first frame update
+	  void Start()
+
     {
-        //adjust dmg, agility and healthPoints according to level(?)
+        //adjust dmg, agility and health according to level(?)
     }
 
     // Update is called once per frame
@@ -33,12 +35,16 @@ public class Combatant : SerializedMonoBehaviour
         
     }
 
+
+    public float Health { get => health; }
+    
     public bool TakeDamage(float dmg)
 	{
         healthPoints -= dmg;    
         if (healthPoints <= 0)
 		{
             //Update the game to show that the character has died
+            health = 0;
             return true;
 		}
         //Update the health bar
