@@ -11,6 +11,7 @@ public class TurnManager : SerializedMonoBehaviour
 
     public GameObject combatantParent;
     public Combatant[] combatantsArray;
+	public GameObject turnOrderIndicator;
 
     private void Awake()
 	{
