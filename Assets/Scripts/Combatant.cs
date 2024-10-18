@@ -15,16 +15,15 @@ public class Combatant : SerializedMonoBehaviour
     protected float healthMax = 100f; 
     [SerializeField]
     protected float attackPower = 20f;
-	  [SerializeField]
-	  private float agility = 10f;
+	[SerializeField]
+    private float agility = 10f;
     [SerializeField]
     protected bool isAlly = false;
     [SerializeField]
     private bool hasAttacked = false;
 
-	  // Start is called before the first frame update
-	  void Start()
-
+	// Start is called before the first frame update
+    void Start()
     {
         //adjust dmg, agility and health according to level(?)
     }
