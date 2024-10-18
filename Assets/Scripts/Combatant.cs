@@ -39,8 +39,8 @@ public class Combatant : SerializedMonoBehaviour
     
     public bool TakeDamage(float dmg)
 	{
-        healthPoints -= dmg;    
-        if (healthPoints <= 0)
+        health -= dmg;    
+        if (health <= 0)
 		{
             //Update the game to show that the character has died
             health = 0;
