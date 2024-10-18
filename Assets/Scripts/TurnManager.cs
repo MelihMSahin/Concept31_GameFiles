@@ -10,6 +10,8 @@ public class TurnManager : SerializedMonoBehaviour
     TurnState turnState;
 
     public GameObject combatantParent;
+    public Combatant[] combatantsArray;
+	public GameObject turnIndicator;
     public Dictionary<string, Combatant> combatantDict = new();
 
 
@@ -44,6 +46,15 @@ public class TurnManager : SerializedMonoBehaviour
                 noOfEnemies += 1;
             }
             
+		{
+            Combatant nextAttacker = NextAttacker();
+			      //attack()
+		{
+            Combatant nextAttacker = NextAttacker();
+			      //attack()
+		{
+            Combatant nextAttacker = NextAttacker();
+			      //attack()
 		}
     }
 
