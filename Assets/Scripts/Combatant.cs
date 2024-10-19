@@ -50,7 +50,13 @@ public class Combatant : SerializedMonoBehaviour
         return false;
 	}
 
-    public virtual float DealDmg()
+
+    public virtual bool Attack()
+	{
+        return false;
+	}
+
+    private float DealDmg()
 	{
         Debug.Log("Combatant");
         //Play the animation, describe what happened in text

@@ -9,10 +9,8 @@ public class PlayerCombatant : Combatant
 		isAlly = true;
 	}
 
-	public override float DealDmg()
+	public override bool Attack()
 	{
-		Debug.Log("Player");
-		//Play the animation, describe what happened in text
-		return attackPower;
+		return false;
 	}
 }

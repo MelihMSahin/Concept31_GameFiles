@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEngine.UIElements;
 
 public class TurnManager : SerializedMonoBehaviour
 {
@@ -17,7 +18,7 @@ public class TurnManager : SerializedMonoBehaviour
 
     private void Awake()
 	{
-	    TurnState turnState = TurnState.START;
+	    turnState = TurnState.START;
         combatantParent = this.gameObject;
 
 		//Find and instantiate player characters; below is a temporary solution
@@ -38,8 +39,8 @@ public class TurnManager : SerializedMonoBehaviour
         turnState = TurnState.SELECTION;
     }
 
-    void FixedUpdate()
-    {
+	void FixedUpdate()
+	{
 		//Select next attacker
 		if (turnState == TurnState.SELECTION)
 		{
@@ -51,10 +52,23 @@ public class TurnManager : SerializedMonoBehaviour
 		if (turnState == TurnState.ACTION)
 		{
 			turnState = TurnState.WAIT;
+			if (!(nextAttacker is PlayerCombatant))
+			{
+				nextAttacker.Attack();
+			}
+
 			//Attack, at the end remove the indicator and set hasAttacked to true
+			if (nextAttacker.HasAttacked)
+			{
+				turnState = TurnState.SELECTION;
+			}
 		}
+	}
 
-
+	public void OnBasicAttackButton()
+	{
+		if (!(turnState == TurnState.ACTION && nextAttacker is PlayerCombatant)) { Debug.Log("not player"); return; }
+		Debug.Log(nextAttacker.transform.position);
 	}
 
 	IEnumerator wait(float seconds)
