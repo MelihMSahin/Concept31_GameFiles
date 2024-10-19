@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 120079801}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: 7}
+  m_LocalPosition: {x: -3, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -251,9 +251,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 40
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &271988636
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,7 +452,7 @@ Transform:
   m_GameObject: {fileID: 333261119}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: 13}
+  m_LocalPosition: {x: -3, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -479,9 +481,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 50
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &522904803
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +588,7 @@ Transform:
   m_GameObject: {fileID: 522904803}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 7}
+  m_LocalPosition: {x: 3, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -613,9 +617,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 10
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &567971700
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,7 +724,7 @@ Transform:
   m_GameObject: {fileID: 567971700}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 13}
+  m_LocalPosition: {x: 3, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -747,9 +753,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 20
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &752877303
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,7 +860,7 @@ Transform:
   m_GameObject: {fileID: 752877303}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: 10}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -881,9 +889,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 60
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &811151381
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +920,7 @@ Transform:
   m_GameObject: {fileID: 811151381}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -942,11 +952,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: combatants
-      Entry: 6
-      Data: 
+    SerializationNodes: []
   combatantParent: {fileID: 811151381}
+  combatantsArray: []
+  turnOrderIndicator: {fileID: 1446747886861520237, guid: 90884b719b6dd3a468bfbfeca042b0c6, type: 3}
 --- !u!1 &1196343159
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,7 +1058,7 @@ Transform:
   m_GameObject: {fileID: 1196343159}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 10}
+  m_LocalPosition: {x: 3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1078,9 +1087,11 @@ MonoBehaviour:
     SerializationNodes: []
   lvl: 1
   experiencePoints: 0
-  healthPoints: 100
+  health: 100
   attackPower: 20
   agility: 30
+  isAlly: 0
+  hasAttacked: 0
 --- !u!1 &1467915496
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,11 +6,14 @@ using Sirenix.Serialization;
 
 public class TurnManager : SerializedMonoBehaviour
 {
-    enum TurnState { START, COMBAT, WON, LOST };
+    enum TurnState { START, SELECTION, ACTION, WON, LOST, WAIT };
     TurnState turnState;
 
     public GameObject combatantParent;
     public Combatant[] combatantsArray;
+	public GameObject turnOrderIndicator;
+
+	private Combatant nextAttacker = null;
 
     private void Awake()
 	{
@@ -32,20 +35,50 @@ public class TurnManager : SerializedMonoBehaviour
 	void Start()
     {
         //Introduce Enemiess to the player
-        turnState = TurnState.COMBAT;
+        turnState = TurnState.SELECTION;
     }
 
     void FixedUpdate()
     {
-		while (turnState == TurnState.COMBAT)
+		//Select next attacker
+		if (turnState == TurnState.SELECTION)
 		{
-            Combatant nextAttacker = NextAttacker();
-			      //attack()
+			nextAttacker = NextAttacker();
+			turnState = TurnState.ACTION;
 		}
+
+		//Attack
+		if (turnState == TurnState.ACTION)
+		{
+			turnState = TurnState.WAIT;
+			//Attack, at the end remove the indicator and set hasAttacked to true
+		}
+
+
 	}
-    public Combatant NextAttacker()
+
+	IEnumerator wait(float seconds)
 	{
-        Combatant nextAttacker = null;
+		yield return new WaitForSeconds(seconds);
+		turnState = TurnState.SELECTION;
+	}
+
+	#region NextAttacker
+	public Combatant NextAttacker()
+	{
+		nextAttacker = findNextAttacker();
+		if (nextAttacker == null)
+		{
+			ResetAllAttackers();
+			nextAttacker = findNextAttacker();
+		}
+		AttackerIndicator();
+		return nextAttacker;
+	}
+
+	private Combatant findNextAttacker()
+	{
+		nextAttacker = null;
 		foreach (Combatant combatant in combatantsArray)
 		{
 			if (!combatant.HasAttacked)
@@ -56,14 +89,20 @@ public class TurnManager : SerializedMonoBehaviour
 				}
 			}
 		}
-		if (nextAttacker == null)
-		{
-			foreach (Combatant combatant in combatantsArray)
-			{
-				combatant.HasAttacked = false;
-			}
-		}
-		nextAttacker.HasAttacked = true;
 		return nextAttacker;
 	}
+
+	private void ResetAllAttackers()
+	{
+		foreach (Combatant combatant in combatantsArray)
+		{
+			combatant.HasAttacked = false;
+		}
+	}
+
+	private void AttackerIndicator()
+	{
+		Instantiate(turnOrderIndicator, nextAttacker.transform);
+	}
+	#endregion
 }
