@@ -9,8 +9,8 @@ public class PlayerCombatant : Combatant
 		isAlly = true;
 	}
 
-	public override bool Attack()
+	public override bool BasicAttack(Combatant target)
 	{
-		return false;
+		return target.TakeDamage(DealDmg());
 	}
 }

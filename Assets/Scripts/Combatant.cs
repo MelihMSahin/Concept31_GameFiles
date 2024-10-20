@@ -6,13 +6,16 @@ using Sirenix.Serialization;
 
 public class Combatant : SerializedMonoBehaviour
 {
+
+    public string combatantName = "Dave";
     [SerializeField]
     protected int lvl = 1;
     [SerializeField]
     protected float experiencePoints = 0f;
     [SerializeField]
+    protected float healthMax = 100f;
+    [SerializeField]
     protected float health = 100f;
-    protected float healthMax = 100f; 
     [SerializeField]
     protected float attackPower = 20f;
 	[SerializeField]
@@ -51,12 +54,13 @@ public class Combatant : SerializedMonoBehaviour
 	}
 
 
-    public virtual bool Attack()
+    public virtual bool BasicAttack(Combatant target)
 	{
+
         return false;
 	}
 
-    private float DealDmg()
+    protected float DealDmg()
 	{
         Debug.Log("Combatant");
         //Play the animation, describe what happened in text

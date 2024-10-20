@@ -1,0 +1,45 @@
+{
+    "name": "ChooseTarget",
+    "maps": [
+        {
+            "name": "ChooseTarget",
+            "id": "1f5bf98c-eba9-418c-aed9-26da49cefedd",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "cb3d62bf-8215-4baf-9ebe-e576b422ba64",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "946f359e-accb-4333-828e-431310c07e63",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "89b87ffa-c841-454e-92e7-b16749c15c7a",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

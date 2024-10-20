@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 9014385478682144735}
   - component: {fileID: 6005617096826367586}
   m_Layer: 0
-  m_Name: TurnOrderIndicator
-  m_TagString: TurnIndicator
+  m_Name: TargetIndicator
+  m_TagString: TargetIndicator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ad98727ea474a9b4fa9e62923da35ea8, type: 2}
+  - {fileID: 2100000, guid: 43ae691774a9abd4ebbccecb483c1481, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
