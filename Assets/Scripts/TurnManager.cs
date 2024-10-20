@@ -66,7 +66,6 @@ public class TurnManager : SerializedMonoBehaviour
 		if (turnState == TurnState.SELECTION)
 		{
 			DeactivateTargetButtons();
-			ActivateAbilityButtons();
 			nextAttacker = NextAttacker();
 			turnState = TurnState.ACTION;
 		}
