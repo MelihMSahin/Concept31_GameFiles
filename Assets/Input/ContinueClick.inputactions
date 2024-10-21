@@ -1,0 +1,34 @@
+{
+    "name": "ContinueClick",
+    "maps": [
+        {
+            "name": "nextAction",
+            "id": "1fed3de5-bb5f-476a-832a-8c62ad241376",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "6ee11347-54c6-4d0b-a97f-29e5822baa55",
+                    "expectedControlType": "Digital",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5e3246c7-1a1b-4d87-9d90-45f7d0627714",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
