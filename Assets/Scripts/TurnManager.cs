@@ -6,16 +6,18 @@ using Sirenix.Serialization;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
+
 public class TurnManager : SerializedMonoBehaviour
 {
-    enum TurnState { START, SELECTION, ACTION, WON, LOST, WAIT };
+    enum TurnState { START, SELECTION, ENEMYACTION, ACTION, WON, LOST, WAIT };
 	[SerializeField]
     TurnState turnState;
-	
+
 	[Space]
 	[Header("UI")]
 	public Button[] abilityButtons;
 	public Button[] targetButtons;
+	public Button nextButton;
 
 	[Space]
 	[Header("Combatants")]
@@ -35,6 +37,7 @@ public class TurnManager : SerializedMonoBehaviour
 
 	private void Awake()
 	{
+		nextButton.gameObject.SetActive(false);
 		SetTargetConfirmArray(noOfEnemies);
 
 		DeactivateAbilityButtons();
@@ -52,8 +55,6 @@ public class TurnManager : SerializedMonoBehaviour
         combatantsArray = combatantParent.GetComponentsInChildren<Combatant>();
     }
 
-	
-
 	void Start()
     {
         //Introduce Enemiess to the player
@@ -65,6 +66,7 @@ public class TurnManager : SerializedMonoBehaviour
 		//Select next attacker
 		if (turnState == TurnState.SELECTION)
 		{
+			//Debug.Log("SelectionState");
 			DeactivateTargetButtons();
 			nextAttacker = NextAttacker();
 			turnState = TurnState.ACTION;
@@ -74,7 +76,7 @@ public class TurnManager : SerializedMonoBehaviour
 		if (turnState == TurnState.ACTION)
 		{
 			turnState = TurnState.WAIT;
-			if (!(nextAttacker is PlayerCombatant)) { }
+			if (!(nextAttacker is PlayerCombatant)) { EnemyAttack(); }
 			else { ActivateAbilityButtons(); }
 		}
 
@@ -83,7 +85,115 @@ public class TurnManager : SerializedMonoBehaviour
 			RemoveTurnIndicators();
 			turnState = TurnState.SELECTION; 
 		}
+
+
+		
+
+		if (!CheckIfEnemyLeft())
+		{
+			turnState = TurnState.WON;
+			DeactivateAbilityButtons();
+			DeactivateTargetButtons();
+			nextAttacker = null;
+		}
+
+		if (!CheckIfPlayerLeft())
+		{
+			turnState = TurnState.LOST;
+			DeactivateAbilityButtons();
+			DeactivateTargetButtons();
+			nextAttacker = null;
+		}
 	}
+
+	private bool CheckIfPlayerLeft()
+	{
+		bool isPlayerLeft = false;
+		foreach (Combatant combatant in combatantsArray)
+		{
+
+			if (combatant is PlayerCombatant)
+			{
+				isPlayerLeft = true;
+			}
+		}
+		return isPlayerLeft;
+	}
+
+	private bool CheckIfEnemyLeft()
+	{
+		bool isEnemyLeft = false;
+		foreach (Combatant combatant in combatantsArray)
+		{
+			
+			if (!(combatant is PlayerCombatant))
+			{
+				isEnemyLeft = true;
+			}
+		}
+		return isEnemyLeft;
+	}
+
+	#region Enemy AI
+	public void EnemyAttack()
+	{
+		//Enemy chooses an attack
+		turnState = TurnState.ENEMYACTION;
+
+		Combatant target = FindTargetPlayer();
+		if (nextAttacker.BasicAttack(target))
+		{
+			combatantsArray = RemoveCombatantFromArray(target);
+		}
+
+		//Update text to notify the user of what happened.
+		nextButton.gameObject.SetActive(true);
+
+	}
+
+	public void FinishEnemyAttack()
+	{
+		nextButton.gameObject.SetActive(false);
+		nextAttacker.HasAttacked = true;
+	}
+
+	public Combatant FindTargetPlayer()
+	{
+		int noOfPlayerCharacters = NoOfPlayerCharacters();
+		int targetNo = Random.Range(0, noOfPlayerCharacters - 1);
+		
+		int count = 0;
+		int playerNo = 0;
+		while (count < combatantsArray.Length)
+		{
+			if ((combatantsArray[count] is PlayerCombatant))
+			{
+				if (playerNo == targetNo)
+				{
+					return combatantsArray[count];
+				}
+				playerNo += 1;
+			}
+			count += 1;
+		}
+		Debug.LogError("Couldn't find target");
+		return combatantsArray[combatantsArray.Length - 1]; //This should never happen
+	}
+
+	private int NoOfPlayerCharacters()
+	{
+		int noOfPlayerCharacters = 0;
+		foreach (Combatant combatant in combatantsArray)
+		{
+			if (combatant is PlayerCombatant)
+			{
+				noOfPlayerCharacters += 1;
+			}
+		}
+		return noOfPlayerCharacters;
+	}
+
+	#endregion
 
 	#region Button Managers
 	private void DeactivateAbilityButtons()
@@ -124,30 +234,34 @@ public class TurnManager : SerializedMonoBehaviour
 
 	public void OnTarget1ButtonPress()
 	{
-		TargetAndAttack(1);
+		PlayerTargetAndAttack(1);
 	}
 
 	public void OnTarget2ButtonPress()
 	{
-		TargetAndAttack(2);
+		PlayerTargetAndAttack(2);
 	}
 
 	public void OnTarget3ButtonPress()
 	{
-		TargetAndAttack(3);
+		PlayerTargetAndAttack(3);
 	}
 	#endregion
 
-	#region Target and Attack
-	public void TargetAndAttack(int targetNo)
+	#region Player Target and Attack
+	public void PlayerTargetAndAttack(int targetNo)
 	{
 		targetNo -= 1;
-		Combatant target = FindTarget(targetNo);
+		Combatant target = FindTargetEnemy(targetNo);
 		DeconfirmOtherTargets(targetNo);
 
 		if (targetConfirms[targetNo])
 		{
-			nextAttacker.BasicAttack(target);
+			if (nextAttacker.BasicAttack(target))
+			{
+				combatantsArray = RemoveCombatantFromArray(target);
+			}
+			
 			nextAttacker.HasAttacked = true;
 			DeconfirmOtherTargets(-1);
 			RemoveTargetIndicators();
@@ -159,7 +273,30 @@ public class TurnManager : SerializedMonoBehaviour
 		targetConfirms[targetNo] = true;
 	}
 
-	public Combatant FindTarget(int targetNo)
+	private Combatant[] RemoveCombatantFromArray(Combatant target)
+	{
+		int temp = -1;
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			if (target.Equals(combatantsArray[i]))
+			{
+				combatantsArray[i] = null;
+				temp = i;
+			}
+		}
+		Combatant[] tempArray = new Combatant[combatantsArray.Length - 1];
+		for (int i = 0; i < temp; i++)
+		{
+			tempArray[i] = combatantsArray[i];
+		}
+		for (int i = temp; i < combatantsArray.Length - 1; i++)
+		{
+			tempArray[i] = combatantsArray[i + 1];
+		}
+		return tempArray;
+	}
+
+	public Combatant FindTargetEnemy(int targetNo)
 	{
 		if (targetNo < 0 || targetNo > 2) { Debug.LogError("False targetNo"); }
 
@@ -201,26 +338,21 @@ public class TurnManager : SerializedMonoBehaviour
 		}
 	}
 	#endregion
-	IEnumerator wait(float seconds)
-	{
-		yield return new WaitForSeconds(seconds);
-		turnState = TurnState.SELECTION;
-	}
 
 	#region NextAttacker
 	public Combatant NextAttacker()
 	{
-		nextAttacker = findNextAttacker();
+		nextAttacker = FindNextAttacker();
 		if (nextAttacker == null)
 		{
 			ResetAllAttackers();
-			nextAttacker = findNextAttacker();
+			nextAttacker = FindNextAttacker();
 		}
 		InstantiateIndicator(turnOrderIndicator, nextAttacker.transform);
 		return nextAttacker;
 	}
 
-	private Combatant findNextAttacker()
+	private Combatant FindNextAttacker()
 	{
 		nextAttacker = null;
 		foreach (Combatant combatant in combatantsArray)
@@ -245,7 +377,7 @@ public class TurnManager : SerializedMonoBehaviour
 	}
 	#endregion
 
-	#region Add and remove indicators
+	#region Add and Remove Indicators
 	private void InstantiateIndicator(GameObject objectToInstantiate, Transform transform)
 	{
 		Instantiate(objectToInstantiate, transform);
@@ -270,4 +402,5 @@ public class TurnManager : SerializedMonoBehaviour
 			Destroy(o);
 		}
 	}
+
 }

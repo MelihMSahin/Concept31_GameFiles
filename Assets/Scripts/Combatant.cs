@@ -8,14 +8,19 @@ public class Combatant : SerializedMonoBehaviour
 {
 
     public string combatantName = "Dave";
+
     [SerializeField]
     protected int lvl = 1;
     [SerializeField]
     protected float experiencePoints = 0f;
+
+    [Space]
     [SerializeField]
     protected float healthMax = 100f;
     [SerializeField]
     protected float health = 100f;
+
+    [Space]
     [SerializeField]
     protected float attackPower = 20f;
 	[SerializeField]
@@ -24,6 +29,8 @@ public class Combatant : SerializedMonoBehaviour
     protected bool isAlly = false;
     [SerializeField]
     private bool hasAttacked = false;
+    [SerializeField]
+    private bool isAlive = true;
 
 	// Start is called before the first frame update
     void Start()
@@ -34,7 +41,10 @@ public class Combatant : SerializedMonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        if (!isAlive)
+		{
+            GameObject.Destroy(gameObject, 0.2f);
+        }
     }
 
 
@@ -47,6 +57,7 @@ public class Combatant : SerializedMonoBehaviour
 		{
             //Update the game to show that the character has died
             health = 0;
+            isAlive = false;
             return true;
 		}
         //Update the health bar
@@ -54,11 +65,10 @@ public class Combatant : SerializedMonoBehaviour
 	}
 
 
-    public virtual bool BasicAttack(Combatant target)
+    public bool BasicAttack(Combatant target)
 	{
-
-        return false;
-	}
+        return target.TakeDamage(DealDmg());
+    }
 
     protected float DealDmg()
 	{
