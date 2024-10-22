@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine.UI;
 
-public class Combatant : SerializedMonoBehaviour
+public class Combatant : MonoBehaviour
 {
     [SerializeField]
     private string combatantName;

@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Combat.unity
+    guid: 5c226f64049db3d409eb5c1c9075785e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: aa00f27f95ba15b4a9d21b57a7534669, type: 2}
   m_UseUCBPForAssetBundles: 0

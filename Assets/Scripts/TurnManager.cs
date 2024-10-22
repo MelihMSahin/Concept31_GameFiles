@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
 
 
-public class TurnManager : SerializedMonoBehaviour
+public class TurnManager : MonoBehaviour
 {
     enum TurnState { START, SELECTION, ENEMYACTION, ACTION, WON, LOST, WAIT };
 	[SerializeField]
