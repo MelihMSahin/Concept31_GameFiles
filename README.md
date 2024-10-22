@@ -21,7 +21,7 @@ Clone the Repository: Clone this repository using:
 bash
 Copy code
 git clone <repository_url>
-Open with Unity: Open the project in Unity (version 2021.3 or later recommended).
+Open with Unity: Open the project in Unity (version 2023.1.13f1 or later recommended).
 Scene Setup: Ensure the scene with the TurnManager is set up properly.
 Run the Game: Press the Play button in the Unity Editor to start the game.
 How to Play
