@@ -36,11 +36,41 @@ public class Combatant : SerializedMonoBehaviour
     [SerializeField]
     private bool isAlive = true;
 
-	// Start is called before the first frame update
-    void Start()
+	void Awake()
     {
-        //adjust dmg, agility and health according to level(?)
+        RandomiseStats(); 
     }
+
+	protected void Start()
+	{
+        health = healthMax;
+	}
+	/* A function to imporve the prototype.
+     * The final product will have this overwritten in the player combatant class to carry over data
+     * Random encounter's will use a version that scales with player strength (lvls)
+     * Won't be called on Awake so boss encounter's won't be random, instead called by TurnManager of random encounter scenes.
+     */
+	protected void RandomiseStats()
+    {
+        string[] names = { "Harry", "Ross",
+                        "Bruce", "Cook",
+                        "Carolyn", "Morgan",
+                        "Albert", "Walker",
+                        "Randy", "Reed",
+                        "Larry", "Barnes",
+                        "Lois", "Wilson",
+                        "Jesse", "Campbell",
+                        "Ernest", "Rogers",
+                        "Theresa", "Patterson",
+                        "Henry", "Simmons",
+                        "Michelle", "Perry",
+                        "Frank", "Butler",
+                        "Shirley" };
+        combatantName = names[Random.Range(0, names.Length)];
+        healthMax = Random.Range(75, 125);
+        agility = Random.Range(1, 100);
+        attackPower = Random.Range(10, 30);
+	}
 
     // Update is called once per frame
     void FixedUpdate()
@@ -56,6 +86,7 @@ public class Combatant : SerializedMonoBehaviour
     public void SetSlider(Slider slider)
 	{
         healthBar = slider;
+        healthBar.maxValue = healthMax;
 	}
 
     public float Health { get => health; }

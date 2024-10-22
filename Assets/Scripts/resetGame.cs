@@ -1,0 +1,10 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class resetGame : MonoBehaviour
+{
+    public void ResetGame()
+	{
+		SceneManager.LoadScene("Combat");
+	}
+}

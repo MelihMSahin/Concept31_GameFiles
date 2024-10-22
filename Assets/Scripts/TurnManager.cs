@@ -21,10 +21,17 @@ public class TurnManager : SerializedMonoBehaviour
 	public Button[] targetButtons;
 	public Button nextButton;
 	public TextMeshProUGUI turnExplainer;
+	public Canvas canvas;
+	public Canvas endCanvas;
+	public TextMeshProUGUI endText;
 
 	[Space]
 	[Header("Combatants")]
+	public GameObject positionsParent;
+	public Transform[] positionsArray;
     public Combatant[] combatantsArray;
+	public GameObject allyPrefab;
+	public GameObject enemyPrefab;
 
 	[Space]
 	[Header("Indicators")]
@@ -39,11 +46,28 @@ public class TurnManager : SerializedMonoBehaviour
 
 	private void Awake()
 	{
+		endCanvas.gameObject.SetActive(false);
 		turnState = TurnState.START;
-
+		InstantiateCombatants();
+		nextAttacker = null;
 	}
 
-   
+	private void InstantiateCombatants()
+	{
+		positionsArray = positionsParent.GetComponentsInChildren<Transform>();
+		for (int i = 0; i < 3; i++)
+		{
+			GameObject temp = Instantiate(allyPrefab, gameObject.transform);
+			temp.transform.position = positionsArray[i+1].position;
+		}
+		for (int i = 3; i < 6; i++)
+		{
+			GameObject temp = Instantiate(enemyPrefab, gameObject.transform);
+			temp.transform.position = positionsArray[i+1].position;
+		}
+	}
+
+
 
 	void Start()
     {
@@ -55,13 +79,22 @@ public class TurnManager : SerializedMonoBehaviour
 
 		setCombatants();
 
-		turnState = TurnState.SELECTION;
 		SetButtonNames();
 		SetHealthBars();
+		StartCoroutine(Introduction());
 	}
+
 	private void setCombatants()
 	{
 		combatantsArray = gameObject.GetComponentsInChildren<Combatant>();
+	}
+
+	IEnumerator Introduction()
+	{
+		string temp = "Your allies are; " + combatantsArray[0].CombatantName + ", " + combatantsArray[1].CombatantName + " and " + combatantsArray[2].CombatantName + ". Good luck!";
+		turnExplainer.text = temp;
+		yield return new WaitForSecondsRealtime(5);
+		turnState = TurnState.SELECTION;
 	}
 
 	void FixedUpdate()
@@ -72,7 +105,7 @@ public class TurnManager : SerializedMonoBehaviour
 			//Debug.Log("SelectionState");
 			DeactivateTargetButtons();
 			nextAttacker = NextAttacker();
-			turnExplainer.text = "It is " + nextAttacker + "'s turn!";
+			turnExplainer.text = "It is " + nextAttacker.CombatantName + "'s turn!";
 			turnState = TurnState.ACTION;
 		}
 
@@ -88,10 +121,13 @@ public class TurnManager : SerializedMonoBehaviour
 			}
 		}
 
-		if (nextAttacker.HasAttacked) 
+		if (turnState == TurnState.ENEMYACTION || turnState == TurnState.ACTION || turnState == TurnState.WAIT) 
 		{
-			RemoveTurnIndicators();
-			turnState = TurnState.SELECTION; 
+			if (nextAttacker.HasAttacked)
+			{
+				RemoveTurnIndicators();
+				turnState = TurnState.SELECTION;
+			}
 		}
 
 
@@ -111,6 +147,20 @@ public class TurnManager : SerializedMonoBehaviour
 			DeactivateAbilityButtons();
 			DeactivateTargetButtons();
 			nextAttacker = null;
+		}
+
+		if (turnState == TurnState.WON)
+		{
+			canvas.gameObject.SetActive(false);
+			endCanvas.gameObject.SetActive(true);
+			endText.text = "Congratulations! You won!";
+		}
+
+		if (turnState == TurnState.LOST)
+		{
+			canvas.gameObject.SetActive(false);
+			endCanvas.gameObject.SetActive(true);
+			endText.text = "You lost.";
 		}
 	}
 
@@ -257,6 +307,21 @@ public class TurnManager : SerializedMonoBehaviour
 			button.gameObject.SetActive(b);
 		}
 	}
+
+	public void RemoveTargetButton(int targetNo)
+	{
+		Button[] temp = new Button[targetButtons.Length - 1];
+		int j = 0;
+		for (int i = 0; i < targetButtons.Length; i++)
+		{
+			if (targetNo != i)
+			{
+				temp[j] = targetButtons[i];
+				j += 1;
+			}
+		}
+		targetButtons = temp;
+	}
 	#endregion
 
 	#region On Button Press
@@ -269,24 +334,39 @@ public class TurnManager : SerializedMonoBehaviour
 
 	public void OnTarget1ButtonPress()
 	{
-		StartCoroutine(PlayerTargetAndAttack(1));
+		StartCoroutine(PlayerTargetAndAttack(0));
 	}
 
 	public void OnTarget2ButtonPress()
 	{
-		StartCoroutine(PlayerTargetAndAttack(2));
+		int targetNo = 1;
+		int noOfEnemyLeft = NoOfEnemyCharacters();
+		if (noOfEnemyLeft < 3)
+		{
+			targetNo = 0;
+		}
+		StartCoroutine(PlayerTargetAndAttack(targetNo));
 	}
 
 	public void OnTarget3ButtonPress()
 	{
-		StartCoroutine(PlayerTargetAndAttack(3));
+		int targetNo = 2;
+		int noOfEnemyLeft = NoOfEnemyCharacters();
+		if (noOfEnemyLeft == 1)
+		{
+			targetNo = 0;
+		}
+		else if (noOfEnemyLeft == 2)
+		{
+			targetNo = 1;
+		}
+		StartCoroutine(PlayerTargetAndAttack(targetNo));
 	}
 	#endregion
 
 	#region Player Target and Attack
 	IEnumerator PlayerTargetAndAttack(int targetNo)
 	{
-		targetNo -= 1;
 		Combatant target = FindTargetEnemy(targetNo);
 		DeconfirmOtherTargets(targetNo);
 
@@ -295,6 +375,8 @@ public class TurnManager : SerializedMonoBehaviour
 			if (nextAttacker.BasicAttack(target))
 			{
 				turnExplainer.text = "You killed " + target.CombatantName;
+				DeactivateTargetButtons();
+				RemoveTargetButton(targetNo);
 				combatantsArray = RemoveCombatantFromArray(target);
 			}
 			else { turnExplainer.text = "You attacked " + target.CombatantName; }
@@ -339,8 +421,6 @@ public class TurnManager : SerializedMonoBehaviour
 
 	public Combatant FindTargetEnemy(int targetNo)
 	{
-		if (targetNo < 0 || targetNo > 2) { Debug.LogError("False targetNo"); }
-
 		int count = 0;
 		int enemyNo = 0;
 		while (count < combatantsArray.Length)
@@ -357,6 +437,19 @@ public class TurnManager : SerializedMonoBehaviour
 		}
 		Debug.LogError("Couldn't find target");
 		return combatantsArray[combatantsArray.Length - 1];
+	}
+
+	private int NoOfEnemyCharacters()
+	{
+		int total = 0;
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			if (!(combatantsArray[i] is PlayerCombatant))
+			{
+				total += 1;
+			}
+		}
+		return total;
 	}
 	
 	public void DeconfirmOtherTargets(int currentTarget)
