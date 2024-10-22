@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class NewMovement : MonoBehaviour
 {
-    public Rigidbody rb;  // Change from Rigidbody2D to Rigidbody
+    public Rigidbody rb;
     public float moveSpeed;
     private Vector3 _moveDirection;
     public InputActionReference move;
@@ -18,10 +18,14 @@ public class NewMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Create a movement vector in the 3D space (use y for vertical movement if needed)
         Vector3 movement = new Vector3(_moveDirection.x, 0, _moveDirection.y) * moveSpeed;
+        rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
 
-        // Apply the movement to the Rigidbody
-        rb.velocity = movement;  // Directly set the velocity
+        if (movement != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 720 * Time.fixedDeltaTime);
+        }
     }
+
 }
