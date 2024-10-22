@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEngine.UI;
 
 public class Combatant : SerializedMonoBehaviour
 {
+    [SerializeField]
+    private string combatantName;
 
-    public string combatantName = "Dave";
-
+    [Space]
     [SerializeField]
     protected int lvl = 1;
     [SerializeField]
     protected float experiencePoints = 0f;
 
     [Space]
+    [Header("Health")]
+    public Slider healthBar;
     [SerializeField]
     protected float healthMax = 100f;
     [SerializeField]
@@ -45,8 +49,14 @@ public class Combatant : SerializedMonoBehaviour
 		{
             GameObject.Destroy(gameObject, 0.2f);
         }
+
+        healthBar.value = health;
     }
 
+    public void SetSlider(Slider slider)
+	{
+        healthBar = slider;
+	}
 
     public float Health { get => health; }
     
@@ -87,6 +97,8 @@ public class Combatant : SerializedMonoBehaviour
         //add exp and check if the player leveled up
     }
 
+
+    public string CombatantName { get => combatantName; set => combatantName = value; }
     public float Agility { get => agility; set => agility = value; }
     public bool HasAttacked { get => hasAttacked; set => hasAttacked = value; }
 

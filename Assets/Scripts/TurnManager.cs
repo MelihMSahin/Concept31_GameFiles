@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 
 public class TurnManager : SerializedMonoBehaviour
@@ -15,13 +16,14 @@ public class TurnManager : SerializedMonoBehaviour
 
 	[Space]
 	[Header("UI")]
+	public Slider[] healthBars;
 	public Button[] abilityButtons;
 	public Button[] targetButtons;
 	public Button nextButton;
+	public TextMeshProUGUI turnExplainer;
 
 	[Space]
 	[Header("Combatants")]
-    public GameObject combatantParent;
     public Combatant[] combatantsArray;
 
 	[Space]
@@ -37,29 +39,30 @@ public class TurnManager : SerializedMonoBehaviour
 
 	private void Awake()
 	{
-		nextButton.gameObject.SetActive(false);
+		turnState = TurnState.START;
+
+	}
+
+   
+
+	void Start()
+    {
 		SetTargetConfirmArray(noOfEnemies);
 
 		DeactivateAbilityButtons();
 		DeactivateTargetButtons();
-	    turnState = TurnState.START;
-        combatantParent = this.gameObject;
+		nextButton.gameObject.SetActive(false);
 
-		//Find and instantiate player characters; below is a temporary solution
 		setCombatants();
-        //Generate Enemy characters
+
+		turnState = TurnState.SELECTION;
+		SetButtonNames();
+		SetHealthBars();
 	}
-
-    private void setCombatants()
+	private void setCombatants()
 	{
-        combatantsArray = combatantParent.GetComponentsInChildren<Combatant>();
-    }
-
-	void Start()
-    {
-        //Introduce Enemiess to the player
-        turnState = TurnState.SELECTION;
-    }
+		combatantsArray = gameObject.GetComponentsInChildren<Combatant>();
+	}
 
 	void FixedUpdate()
 	{
@@ -69,6 +72,7 @@ public class TurnManager : SerializedMonoBehaviour
 			//Debug.Log("SelectionState");
 			DeactivateTargetButtons();
 			nextAttacker = NextAttacker();
+			turnExplainer.text = "It is " + nextAttacker + "'s turn!";
 			turnState = TurnState.ACTION;
 		}
 
@@ -76,8 +80,12 @@ public class TurnManager : SerializedMonoBehaviour
 		if (turnState == TurnState.ACTION)
 		{
 			turnState = TurnState.WAIT;
-			if (!(nextAttacker is PlayerCombatant)) { EnemyAttack(); }
-			else { ActivateAbilityButtons(); }
+			if (!(nextAttacker is PlayerCombatant)) { StartCoroutine(EnemyAttack()); }
+			else 
+			{
+				turnExplainer.text = "It is your fighter: " + nextAttacker.CombatantName + "'s turn to attack!";
+				ActivateAbilityButtons(); 
+			}
 		}
 
 		if (nextAttacker.HasAttacked) 
@@ -134,21 +142,32 @@ public class TurnManager : SerializedMonoBehaviour
 		return isEnemyLeft;
 	}
 
+	private void SetHealthBars()
+	{
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			combatantsArray[i].SetSlider(healthBars[i]);
+		}
+	}
+
 	#region Enemy AI
-	public void EnemyAttack()
+	IEnumerator EnemyAttack()
 	{
 		//Enemy chooses an attack
+		yield return new WaitForSecondsRealtime(2);
 		turnState = TurnState.ENEMYACTION;
-
 		Combatant target = FindTargetPlayer();
+		turnExplainer.text = nextAttacker.CombatantName + " chooses to attack " + target.CombatantName;
+		yield return new WaitForSecondsRealtime(3);
+
 		if (nextAttacker.BasicAttack(target))
 		{
 			combatantsArray = RemoveCombatantFromArray(target);
 		}
+		yield return new WaitForSecondsRealtime(2);
 
 		//Update text to notify the user of what happened.
 		nextButton.gameObject.SetActive(true);
-
 	}
 
 	public void FinishEnemyAttack()
@@ -196,6 +215,21 @@ public class TurnManager : SerializedMonoBehaviour
 	#endregion
 
 	#region Button Managers
+	private void SetButtonNames()
+	{
+		int j = 0;
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			if (!(combatantsArray[i] is PlayerCombatant))
+			{
+
+				TextMeshProUGUI tmp = targetButtons[j].GetComponentInChildren<TextMeshProUGUI>();
+				tmp.text = "Attack: " + combatantsArray[i].CombatantName;
+				j += 1;
+			}	
+		}
+	}
+
 	private void DeactivateAbilityButtons()
 	{
 		ToggleSetActiveForButtonArray(false, abilityButtons);
@@ -228,28 +262,29 @@ public class TurnManager : SerializedMonoBehaviour
 	#region On Button Press
 	public void OnBasicAttackButton()
 	{
+		turnExplainer.text = nextAttacker.CombatantName + "chooses Basic Attack!";
 		DeactivateAbilityButtons();
 		ActivateTargetButtons();
 	}
 
 	public void OnTarget1ButtonPress()
 	{
-		PlayerTargetAndAttack(1);
+		StartCoroutine(PlayerTargetAndAttack(1));
 	}
 
 	public void OnTarget2ButtonPress()
 	{
-		PlayerTargetAndAttack(2);
+		StartCoroutine(PlayerTargetAndAttack(2));
 	}
 
 	public void OnTarget3ButtonPress()
 	{
-		PlayerTargetAndAttack(3);
+		StartCoroutine(PlayerTargetAndAttack(3));
 	}
 	#endregion
 
 	#region Player Target and Attack
-	public void PlayerTargetAndAttack(int targetNo)
+	IEnumerator PlayerTargetAndAttack(int targetNo)
 	{
 		targetNo -= 1;
 		Combatant target = FindTargetEnemy(targetNo);
@@ -259,18 +294,24 @@ public class TurnManager : SerializedMonoBehaviour
 		{
 			if (nextAttacker.BasicAttack(target))
 			{
+				turnExplainer.text = "You killed " + target.CombatantName;
 				combatantsArray = RemoveCombatantFromArray(target);
 			}
-			
+			else { turnExplainer.text = "You attacked " + target.CombatantName; }
+			DeactivateTargetButtons();
+			yield return new WaitForSecondsRealtime(1);
 			nextAttacker.HasAttacked = true;
 			DeconfirmOtherTargets(-1);
 			RemoveTargetIndicators();
-			return;
+			
 		}
-
-		RemoveTargetIndicators();
-		InstantiateIndicator(targetIndicator, target.transform);
-		targetConfirms[targetNo] = true;
+		else
+		{
+			turnExplainer.text = "Confirm " + target.CombatantName + " as target?";
+			RemoveTargetIndicators();
+			InstantiateIndicator(targetIndicator, target.transform);
+			targetConfirms[targetNo] = true;
+		}	
 	}
 
 	private Combatant[] RemoveCombatantFromArray(Combatant target)
