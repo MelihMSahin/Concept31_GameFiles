@@ -299,7 +299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5a589c69bbd324ebb0cd09201e6c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 353117683}
   moveSpeed: 5
   move: {fileID: 4405488835300500403, guid: fca191b9916541a4890ac67659818de7, type: 3}
   interact: {fileID: 0}
@@ -732,7 +731,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &2064885967
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -831,7 +830,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5a589c69bbd324ebb0cd09201e6c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   moveSpeed: 0
   move: {fileID: 7440031397227349209, guid: fca191b9916541a4890ac67659818de7, type: 3}
   interact: {fileID: 7440031397227349209, guid: fca191b9916541a4890ac67659818de7, type: 3}
@@ -844,3 +842,4 @@ SceneRoots:
   - {fileID: 2046206538}
   - {fileID: 353117682}
   - {fileID: 1713705370}
+  - {fileID: 2064885970}

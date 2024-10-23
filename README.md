@@ -16,7 +16,7 @@ Victory & Defeat:
 - You win if all enemies are defeated.
 - You lose if all player-controlled combatants are defeated.
 ____________________________________________________________________________________________________________________________________________
-Installation and Setup
+Installation and Setup: https://pages.github.qmul.ac.uk/ec22884/Concept31_GameBuilds/
 ____________________________________________________________________________________________________________________________________________
 
 To run the game locally:
@@ -34,26 +34,30 @@ ________________________________________________________________________________
 How to Play
 ____________________________________________________________________________________________________________________________________________
 Starting the Game:
-Upon starting the game, the scene will load with three player-controlled combatants and three enemy combatants.
-The game will introduce the player-controlled combatants with a brief message.
-
+Upon starting the game, the scene will load to the overworld. Where you can move with the arrow keys or WASD to touch the cube and start the combat. If you are on a touchscreen device, wait for 30 seconds to enter combat.
+Combat is with three player-controlled combatants and three enemy combatants. Each with randomly generated stats. Use the buttons to play and follow the instructions on the screen.
+Combat loop:
+	-Choose basic attack to attack
+	-Choose your target
+	-Confirm the target by pressing the button again
+	-Press next to move on from the enemy turn
+Once you win or lose, you can replay the fight by pressing the button. 
 ____________________________________________________________________________________________________________________________________________
 Turn Phases
 ____________________________________________________________________________________________________________________________________________
 - Selection Phase: During this phase, the turn order is determined based on the agility of each combatant. The combatant with the highest agility is chosen as the next attacker.
-- Action Phase: If the next attacker is a player-controlled combatant, you will be prompted to choose an action (attack or use abilities) using the UI buttons.
-- Enemy Action Phase: If the next attacker is an enemy, they will automatically attack one of your combatants.
+- Action Phase: If the next attacker is a player-controlled combatant, you will be prompted to choose an action (attack or use abilities) using the UI buttons. Choose and confirm targets with the UI buttons as well.
+- Enemy Action Phase: If the next attacker is an enemy, they will automatically attack one of your combatants. Press next to move on to the next action.
 - Wait Phase: The game pauses for a brief moment while actions resolve.
 - Turn Resolution: The game checks if either side has won or lost after each turn.
 
 ____________________________________________________________________________________________________________________________________________
 Controls
 ____________________________________________________________________________________________________________________________________________
+- WASD and arrow-keys for movement out of combat.
 - Ability Buttons: Select abilities or attacks for your active combatant.
 - Target Buttons: Choose which enemy or ally to target.
 - Next Button: Confirm your selection and proceed with the turn.
-- UI Elements: The health bars indicate the remaining health of each combatant.
-
 ____________________________________________________________________________________________________________________________________________
 End of Game
 ____________________________________________________________________________________________________________________________________________
@@ -65,7 +69,6 @@ ________________________________________________________________________________
 Customization
 ____________________________________________________________________________________________________________________________________________
 
-- Adjusting Combatants: You can adjust the number of enemies or allies by changing the noOfEnemies variable in the TurnManager.
 - Combatant Stats: Modify the Combatant script to adjust attributes like health, attack power, and agility.
 - Prefabs: Use allyPrefab and enemyPrefab for adding new character models to the game.
 
@@ -73,9 +76,7 @@ ________________________________________________________________________________
 Troubleshooting!!!
 ____________________________________________________________________________________________________________________________________________
 - Make sure all UI elements like sliders and buttons are correctly referenced in the TurnManager.
-Combatants Not Spawning: Verify that the positionsParent has all the necessary child positions and that they are properly assigned in the TurnManager.
-- Ensure that endCanvas is disabled initially and the TurnManager script is attached to an active GameObject.
-Contributing
+- Combatants Not Spawning: Verify that the positionsParent has all the necessary child positions and that they are properly assigned in the TurnManager.
 
 
 
