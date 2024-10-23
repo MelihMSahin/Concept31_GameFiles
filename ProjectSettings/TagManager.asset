@@ -7,6 +7,7 @@ TagManager:
   - attackButton
   - TargetIndicator
   - TurnIndicator
+  - CombatTrigger
   layers:
   - Default
   - TransparentFX
