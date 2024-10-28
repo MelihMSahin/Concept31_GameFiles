@@ -34,9 +34,17 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     private bool isAlive = true;
 
+    public Combatant (int lvl, float healthMax, float attackPower, float agility)
+	{
+        this.lvl = lvl;
+        this.healthMax = healthMax;
+        this.attackPower = attackPower;
+        this.agility = agility;
+	}
+
 	void Awake()
     {
-        RandomiseStats(); 
+
     }
 
 	protected void Start()
