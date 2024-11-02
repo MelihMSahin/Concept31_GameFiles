@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +12,7 @@ public class Combatant : MonoBehaviour
     [Space]
     [SerializeField]
     protected int lvl = 1;
-    private int maxLvl = 20;
+    private int maxLvl = 5;
     [SerializeField]
     protected float experiencePoints = 0f;
 
@@ -40,14 +39,14 @@ public class Combatant : MonoBehaviour
     public Combatant (int lvl, float healthMax, float attackPower, float agility)
 	{
         this.lvl = lvl;
-        this.healthMax = HealthMultiplierFromLevels(healthMax);
+        this.healthMax = healthMax;
         this.attackPower = attackPower;
         this.agility = agility;
 	}
 
 	void Awake()
     {
-
+        RandomiseStats();
     }
 
 	protected void Start()
@@ -86,6 +85,7 @@ public class Combatant : MonoBehaviour
     {
         if (!isAlive)
 		{
+            GameObject.Destroy(healthBar.gameObject, 0.2f);
             GameObject.Destroy(gameObject, 0.2f);
         }
 
@@ -123,28 +123,8 @@ public class Combatant : MonoBehaviour
     protected float DealDmg()
 	{
         //Play the animation, describe what happened in text
-        return DamageMultiplierFromLevels();
+        return attackPower;
 	}
-
-    private float DamageMultiplierFromLevels()
-	{
-        /*The goal of this method is the increase the attack power according to the level.
-         * This function grows faster on lower levels, and reaches exactly maxLevelDamageMultiplier times the damage on max lvl.
-         */
-
-        int maxLevelDamageMultiplier = 3;
-        return attackPower * (float) Math.Exp((Math.Log(maxLevelDamageMultiplier)/maxLvl)*(lvl-1));
-	}
-
-    private float HealthMultiplierFromLevels(float maxHealth)
-	{
-        /*The goal of this method is the increase the maxHealth according to the level.
-         * This function grows faster on lower levels, and reaches exactly maxLevelHealthMultiplier times the maxHealth on max lvl.
-         */
-
-        int maxLevelHealthMultiplier = 2;
-        return MathF.Round(healthMax * (float) Math.Exp((Math.Log(maxLevelHealthMultiplier) / maxLvl) * (lvl - 1)));
-    }
 
     public void gainExp()
     {
