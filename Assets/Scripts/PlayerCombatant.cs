@@ -13,5 +13,6 @@ public class PlayerCombatant : Combatant
 	private void Awake()
 	{
 		isAlly = true;
+		RandomiseStats();
 	}
 }
