@@ -13,7 +13,7 @@ public class Combatant : MonoBehaviour
     [Space]
     [SerializeField]
     protected int lvl = 1;
-    private int maxLvl = 20;
+    private int maxLvl = 5;
     [SerializeField]
     protected float experiencePoints = 0f;
 
