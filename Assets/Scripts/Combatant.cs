@@ -85,7 +85,7 @@ public class Combatant : MonoBehaviour
     {
         if (!isAlive)
 		{
-            GameObject.Destroy(healthBar.gameObject);
+            GameObject.Destroy(healthBar.gameObject, 0.2f);
             GameObject.Destroy(gameObject, 0.2f);
         }
 
