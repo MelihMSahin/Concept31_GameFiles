@@ -8,13 +8,17 @@ using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
-    enum TurnState { START, SELECTION, ENEMYACTION, ACTION, WON, LOST, WAIT };
+	#region enum START, SELECTION, ENEMYACTION, ACTION, WON, LOST, WAIT
+	enum TurnState { START, SELECTION, ENEMYACTION, ACTION, WON, LOST, WAIT };
 	[SerializeField]
     TurnState turnState;
+	#endregion
 
+	#region UI Variables
 	[Space]
 	[Header("UI")]
 	public Slider[] healthBars;
+	public Slider[] empowermentBars;
 	public Button[] abilityButtons;
 	public Button[] targetButtons;
 	public Button nextButton;
@@ -22,7 +26,9 @@ public class TurnManager : MonoBehaviour
 	public Canvas canvas;
 	public Canvas endCanvas;
 	public TextMeshProUGUI endText;
+	#endregion
 
+	#region Combatant Variables
 	[Space]
 	[Header("Combatants")]
 	public GameObject positionsParent;
@@ -30,18 +36,22 @@ public class TurnManager : MonoBehaviour
     public Combatant[] combatantsArray;
 	public GameObject allyPrefab;
 	public GameObject enemyPrefab;
+	#endregion
 
+	#region Indicators
 	[Space]
 	[Header("Indicators")]
 	public GameObject turnOrderIndicator;
 	public GameObject targetIndicator;
+	#endregion
 
+	#region Additional Combat Management Variables
 	private Combatant nextAttacker = null;
-
 	private int noOfEnemies = 3;
 	private bool[] targetConfirms;
+	#endregion
 
-
+	#region Setting Up the Combat
 	private void Awake()
 	{
 		endCanvas.gameObject.SetActive(false);
@@ -65,8 +75,6 @@ public class TurnManager : MonoBehaviour
 		}
 	}
 
-
-
 	void Start()
     {
 		SetTargetConfirmArray(noOfEnemies);
@@ -78,13 +86,58 @@ public class TurnManager : MonoBehaviour
 		setCombatants();
 
 		SetButtonNames();
-		SetHealthBars();
+		SetSliders();
 		StartCoroutine(Introduction());
+	}
+
+	public void SetTargetConfirmArray(int size)
+	{
+		targetConfirms = new bool[size];
+		for (int i = 0; i < size; i++)
+		{
+			targetConfirms[i] = false;
+		}
 	}
 
 	private void setCombatants()
 	{
 		combatantsArray = gameObject.GetComponentsInChildren<Combatant>();
+	}
+
+	private void SetButtonNames()
+	{
+		int j = 0;
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			if (!(combatantsArray[i] is PlayerCombatant))
+			{
+
+				TextMeshProUGUI tmp = targetButtons[j].GetComponentInChildren<TextMeshProUGUI>();
+				tmp.text = "Attack: " + combatantsArray[i].CombatantName;
+				j += 1;
+			}
+		}
+	}
+
+	private void SetSliders()
+	{
+		SetHealthBars();
+		SetEmpowermentBars();
+	}
+	private void SetHealthBars()
+	{
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			combatantsArray[i].SetHealthBar(healthBars[i]);
+		}
+	}
+
+	private void SetEmpowermentBars()
+	{
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			combatantsArray[i].SetEmpowermentBar(empowermentBars[i]);
+		}
 	}
 
 	IEnumerator Introduction()
@@ -94,9 +147,11 @@ public class TurnManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(5);
 		turnState = TurnState.SELECTION;
 	}
+	#endregion
 
 	void FixedUpdate()
 	{
+		#region Combat Loop
 		//Select next attacker
 		if (turnState == TurnState.SELECTION)
 		{
@@ -127,10 +182,9 @@ public class TurnManager : MonoBehaviour
 				turnState = TurnState.SELECTION;
 			}
 		}
+		#endregion
 
-
-		
-
+		#region Game Won/Lost
 		if (!CheckIfEnemyLeft())
 		{
 			turnState = TurnState.WON;
@@ -160,8 +214,10 @@ public class TurnManager : MonoBehaviour
 			endCanvas.gameObject.SetActive(true);
 			endText.text = "You lost.";
 		}
+		#endregion
 	}
 
+	#region Game Won/Lost
 	private bool CheckIfPlayerLeft()
 	{
 		bool isPlayerLeft = false;
@@ -189,14 +245,8 @@ public class TurnManager : MonoBehaviour
 		}
 		return isEnemyLeft;
 	}
+	#endregion
 
-	private void SetHealthBars()
-	{
-		for (int i = 0; i < combatantsArray.Length; i++)
-		{
-			combatantsArray[i].SetSlider(healthBars[i]);
-		}
-	}
 
 	#region Enemy AI
 	IEnumerator EnemyAttack()
@@ -259,25 +309,9 @@ public class TurnManager : MonoBehaviour
 		}
 		return noOfPlayerCharacters;
 	}
-
 	#endregion
 
 	#region Button Managers
-	private void SetButtonNames()
-	{
-		int j = 0;
-		for (int i = 0; i < combatantsArray.Length; i++)
-		{
-			if (!(combatantsArray[i] is PlayerCombatant))
-			{
-
-				TextMeshProUGUI tmp = targetButtons[j].GetComponentInChildren<TextMeshProUGUI>();
-				tmp.text = "Attack: " + combatantsArray[i].CombatantName;
-				j += 1;
-			}	
-		}
-	}
-
 	private void DeactivateAbilityButtons()
 	{
 		ToggleSetActiveForButtonArray(false, abilityButtons);
@@ -458,15 +492,6 @@ public class TurnManager : MonoBehaviour
 			{
 				targetConfirms[i] = false;
 			}
-		}
-	}
-
-	public void SetTargetConfirmArray(int size)
-	{
-		targetConfirms = new bool[size];
-		for (int i = 0; i < size; i++)
-		{
-			targetConfirms[i] = false;
 		}
 	}
 	#endregion
