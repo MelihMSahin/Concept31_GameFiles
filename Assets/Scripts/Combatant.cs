@@ -143,7 +143,6 @@ public class Combatant : MonoBehaviour
 	{
         empowermentBar = slider;
         empowermentBar.maxValue = empowermentMax;
-        print(empowermentBar.maxValue);
         SetEmpowermentBarColour();
 	}
 
