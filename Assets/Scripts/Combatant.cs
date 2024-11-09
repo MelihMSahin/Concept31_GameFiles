@@ -41,6 +41,8 @@ public class Combatant : MonoBehaviour
     private float empowermentStateEntryValue = 80f;
     private float empowermentGainOnSameTypeDamage = 10f;
     private float empowermentLossOnOppositeTypeDamage = 10f;
+    private float empowermentIncreaseOnAttack = 20f;
+    private float empowermentMultiplierOnEmpoweringAttack = 2;
     #endregion
 
     #region Other Stats
@@ -125,8 +127,8 @@ public class Combatant : MonoBehaviour
         empowermentBar.value = empowermentValue;
     }
 
-    
-    public void SetHealthBar(Slider slider)
+	#region Set Bars
+	public void SetHealthBar(Slider slider)
     {
         healthBar = slider;
         healthBar.maxValue = healthMax;
@@ -157,8 +159,10 @@ public class Combatant : MonoBehaviour
 	{
         return new Color(r / 255f, b / 255f, g / 255f);
 	}
+	#endregion
 
-    public float Health { get => health; }
+	#region HealthManagement
+	public float Health { get => health; }
     
     public bool TakeDamage(float dmg, EmpowermentType attackerType)
 	{
@@ -175,13 +179,13 @@ public class Combatant : MonoBehaviour
         //Update the health bar
         return false;
 	}
+	#endregion
 
-    private void AdjustEmpowermentOnDamageTaken(EmpowermentType attackerType)
+	private void AdjustEmpowermentOnDamageTaken(EmpowermentType attackerType)
 	{
 		if (empowermentType == attackerType)
 		{
             empowermentValue += empowermentGainOnSameTypeDamage;
-            Debug.Log(empowermentValue);
 		}
         //The reason that I used else if instaed of else is to make adding more types possible. As not all types will be opposite of each.
 		else if (empowermentType == EmpowermentType.HOLY & attackerType == EmpowermentType.CURSE)
@@ -197,8 +201,15 @@ public class Combatant : MonoBehaviour
 
     public bool BasicAttack(Combatant target)
 	{
+        empowermentValue += empowermentIncreaseOnAttack;
         return target.TakeDamage(DealDmg(), empowermentType);
     }
+
+    public bool EmpoweringAttack(Combatant target)
+	{
+        empowermentValue += empowermentMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack;
+        return target.TakeDamage((1/empowermentMultiplierOnEmpoweringAttack) * DealDmg(), empowermentType);
+	}
 
     protected float DealDmg()
 	{
