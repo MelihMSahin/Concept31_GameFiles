@@ -49,6 +49,8 @@ public class TurnManager : MonoBehaviour
 	private Combatant nextAttacker = null;
 	private int noOfEnemies = 3;
 	private bool[] targetConfirms;
+	enum AttackType { BASIC, EMPOWERING, MULTI }
+	AttackType attackType;
 	#endregion
 
 	#region Setting Up the Combat
@@ -359,7 +361,16 @@ public class TurnManager : MonoBehaviour
 	#region On Button Press
 	public void OnBasicAttackButton()
 	{
+		attackType = AttackType.BASIC;
 		turnExplainer.text = nextAttacker.CombatantName + "chooses Basic Attack!";
+		DeactivateAbilityButtons();
+		ActivateTargetButtons();
+	}
+
+	public void OnEmpowermentAttackButton()
+	{
+		attackType = AttackType.EMPOWERING;
+		turnExplainer.text = nextAttacker.CombatantName + "chooses Empowering Attack!";
 		DeactivateAbilityButtons();
 		ActivateTargetButtons();
 	}
@@ -404,7 +415,7 @@ public class TurnManager : MonoBehaviour
 
 		if (targetConfirms[targetNo])
 		{
-			if (nextAttacker.BasicAttack(target))
+			if (Attack(target))
 			{
 				turnExplainer.text = "You killed " + target.CombatantName;
 				DeactivateTargetButtons();
@@ -426,6 +437,28 @@ public class TurnManager : MonoBehaviour
 			InstantiateIndicator(targetIndicator, target.transform);
 			targetConfirms[targetNo] = true;
 		}	
+	}
+
+	private bool Attack(Combatant target)
+	{
+		if (attackType == AttackType.BASIC)
+		{
+			return nextAttacker.BasicAttack(target);
+		}
+		else if (attackType == AttackType.EMPOWERING)
+		{
+			return nextAttacker.EmpoweringAttack(target);
+		}
+		else if (attackType == AttackType.MULTI)
+		{
+			return false;//To implement later
+		}
+		else
+		{
+			Debug.LogError("Impossible attack type. Perhaps attackType was null.");
+			return false;
+		}
+		
 	}
 
 	private Combatant[] RemoveCombatantFromArray(Combatant target)

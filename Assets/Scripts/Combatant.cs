@@ -42,6 +42,7 @@ public class Combatant : MonoBehaviour
     private float empowermentGainOnSameTypeDamage = 10f;
     private float empowermentLossOnOppositeTypeDamage = 10f;
     private float empowermentIncreaseOnAttack = 20f;
+    private float empowermentMultiplierOnEmpoweringAttack = 2;
     #endregion
 
     #region Other Stats
@@ -185,7 +186,6 @@ public class Combatant : MonoBehaviour
 		if (empowermentType == attackerType)
 		{
             empowermentValue += empowermentGainOnSameTypeDamage;
-            Debug.Log(empowermentValue);
 		}
         //The reason that I used else if instaed of else is to make adding more types possible. As not all types will be opposite of each.
 		else if (empowermentType == EmpowermentType.HOLY & attackerType == EmpowermentType.CURSE)
@@ -204,6 +204,12 @@ public class Combatant : MonoBehaviour
         empowermentValue += empowermentIncreaseOnAttack;
         return target.TakeDamage(DealDmg(), empowermentType);
     }
+
+    public bool EmpoweringAttack(Combatant target)
+	{
+        empowermentValue += empowermentMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack;
+        return target.TakeDamage((1/empowermentMultiplierOnEmpoweringAttack) * DealDmg(), empowermentType);
+	}
 
     protected float DealDmg()
 	{
