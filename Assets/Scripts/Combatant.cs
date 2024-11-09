@@ -33,16 +33,18 @@ public class Combatant : MonoBehaviour
 	[Space]
     [Header("Empowerment Variables")]
     public Slider empowermentBar;
-    enum EmpowermentType { HOLY, CURSE };
+    public enum EmpowermentType { HOLY, CURSE };
+    public EmpowermentType empowermentType;
     [SerializeField]
-    private EmpowermentType empowermentType;
     private float empowermentValue = 0f;
-    private float empowermentMax = 100f; //An issue where empowermentMax is set to 0 at the start of the game exist. Temp solution is to set it to 100f at random. Future solution is to set it at instantiation.
+    private float empowermentMax = 100f;
     private float empowermentStateEntryValue = 80f;
-	#endregion
+    private float empowermentGainOnSameTypeDamage = 10f;
+    private float empowermentLossOnOppositeTypeDamage = 10f;
+    #endregion
 
-	#region Other Stats
-	[Space]
+    #region Other Stats
+    [Space]
     [Header("Other Stat Variables")]
     [SerializeField]
     protected float attackPower = 20f;
@@ -60,14 +62,6 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     private bool isAlive = true;
 	#endregion
-
-	public Combatant (int lvl, float healthMax, float attackPower, float agility)
-	{
-        this.lvl = lvl;
-        this.healthMax = healthMax;
-        this.attackPower = attackPower;
-        this.agility = agility;
-	}
 
 	void Awake()
     {
@@ -115,7 +109,6 @@ public class Combatant : MonoBehaviour
             empowermentType = EmpowermentType.HOLY;
 		}
         #endregion
-        empowermentMax = 100f;
 	}
 
 	// Update is called once per frame
@@ -167,8 +160,10 @@ public class Combatant : MonoBehaviour
 
     public float Health { get => health; }
     
-    public bool TakeDamage(float dmg)
+    public bool TakeDamage(float dmg, EmpowermentType attackerType)
 	{
+        AdjustEmpowermentOnDamageTaken(attackerType);
+
         health -= dmg;    
         if (health <= 0)
 		{
@@ -181,10 +176,28 @@ public class Combatant : MonoBehaviour
         return false;
 	}
 
+    private void AdjustEmpowermentOnDamageTaken(EmpowermentType attackerType)
+	{
+		if (empowermentType == attackerType)
+		{
+            empowermentValue += empowermentGainOnSameTypeDamage;
+            Debug.Log(empowermentValue);
+		}
+        //The reason that I used else if instaed of else is to make adding more types possible. As not all types will be opposite of each.
+		else if (empowermentType == EmpowermentType.HOLY & attackerType == EmpowermentType.CURSE)
+		{
+            empowermentValue -= empowermentLossOnOppositeTypeDamage;
+		}
+        else if (empowermentType == EmpowermentType.CURSE & attackerType == EmpowermentType.HOLY)
+        {
+            empowermentValue -= empowermentLossOnOppositeTypeDamage;
+        }
+    }
+
 
     public bool BasicAttack(Combatant target)
 	{
-        return target.TakeDamage(DealDmg());
+        return target.TakeDamage(DealDmg(), empowermentType);
     }
 
     protected float DealDmg()
