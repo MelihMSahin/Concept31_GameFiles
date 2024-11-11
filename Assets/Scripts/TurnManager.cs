@@ -322,6 +322,16 @@ public class TurnManager : MonoBehaviour
 	private void ActivateAbilityButtons()
 	{
 		ToggleSetActiveForButtonArray(true, abilityButtons);
+		//If Empowered, activate multi. If not deactivate multi.
+		ToggleMultiButton(abilityButtons[abilityButtons.Length - 1]);
+	}
+
+	private void ToggleMultiButton(Button button)
+	{
+		if (!nextAttacker.IsEmpowered)
+		{
+			button.gameObject.SetActive(false);
+		}
 	}
 
 	private void DeactivateTargetButtons()
@@ -375,6 +385,14 @@ public class TurnManager : MonoBehaviour
 		ActivateTargetButtons();
 	}
 
+	public void OnMultiAttackButton()
+	{
+		attackType = AttackType.MULTI;
+		turnExplainer.text = nextAttacker.CombatantName + "chooses MULTI Attack!";
+		DeactivateAbilityButtons();
+		StartCoroutine(PlayerMultiAttack());
+	}
+
 	public void OnTarget1ButtonPress()
 	{
 		StartCoroutine(PlayerTargetAndAttack(0));
@@ -407,7 +425,39 @@ public class TurnManager : MonoBehaviour
 	}
 	#endregion
 
+
+
 	#region Player Target and Attack
+	IEnumerator PlayerMultiAttack()
+	{
+		turnExplainer.text = "You used your ultimate move!";
+		string deadNames = "";
+		bool hasKilled = false;
+		yield return new WaitForSecondsRealtime(0.5f);
+		foreach (Combatant combatant in combatantsArray)
+		{
+			if (!(combatant is PlayerCombatant))
+			{
+				if (Attack(combatant))
+				{
+					hasKilled = true;
+					deadNames += combatant.name;
+					combatantsArray = RemoveCombatantFromArray(combatant);
+				}
+			}
+		}
+		if (hasKilled)
+		{
+			turnExplainer.text = "You killed: " + deadNames + ".";
+		}
+		else
+		{
+			turnExplainer.text = "You attacked everyone!";
+		}
+		yield return new WaitForSecondsRealtime(1);
+		nextAttacker.HasAttacked = true;
+	}
+
 	IEnumerator PlayerTargetAndAttack(int targetNo)
 	{
 		Combatant target = FindTargetEnemy(targetNo);
@@ -451,11 +501,10 @@ public class TurnManager : MonoBehaviour
 		}
 		else if (attackType == AttackType.MULTI)
 		{
-			return false;//To implement later
+			return nextAttacker.MultiAttack(target);
 		}
 		else
 		{
-			Debug.LogError("Impossible attack type. Perhaps attackType was null.");
 			return false;
 		}
 		
