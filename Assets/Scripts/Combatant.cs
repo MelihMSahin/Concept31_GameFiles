@@ -39,10 +39,16 @@ public class Combatant : MonoBehaviour
     private float empowermentValue = 0f;
     private float empowermentMax = 100f;
     private float empowermentStateEntryValue = 80f;
-    private float empowermentGainOnSameTypeDamage = 10f;
-    private float empowermentLossOnOppositeTypeDamage = 10f;
+
+
+    private float empowermentGainOnTakingDamage = 5f;
+
     private float empowermentIncreaseOnAttack = 20f;
-    private float empowermentMultiplierOnEmpoweringAttack = 2;
+    private float damageMultiplierOnEmpoweringAttack = 2f;
+
+    private float empowermentBacklashDamage = 5f;
+    [SerializeField]
+    private bool isEmpowered = false;
     #endregion
 
     #region Other Stats
@@ -63,6 +69,8 @@ public class Combatant : MonoBehaviour
     private bool hasAttacked = false;
     [SerializeField]
     private bool isAlive = true;
+    public Transform normalPos;
+    public Transform empoweredPos;
 	#endregion
 
 	void Awake()
@@ -73,7 +81,16 @@ public class Combatant : MonoBehaviour
 	protected void Start()
 	{
         health = healthMax;
+        SetPositionVars();
 	}
+
+    private void SetPositionVars()
+	{
+        normalPos = new GameObject().transform;
+        empoweredPos = new GameObject().transform;
+        normalPos.position = gameObject.transform.position;
+        empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
+    }
 
 	/* A temporary function to imporve testing.
      * The final product will have this overwritten in the player combatant class to carry over data
@@ -100,7 +117,7 @@ public class Combatant : MonoBehaviour
         healthMax = Random.Range(75, 125);
         agility = Random.Range(1, 100);
         attackPower = Random.Range(10, 30);
-        empowermentValue = Random.Range(0f, 100f);
+        empowermentValue = Random.Range(0f, 79f);
 		#region random empowerment type
 		if (Random.Range(0,10) < 5)
 		{
@@ -122,6 +139,8 @@ public class Combatant : MonoBehaviour
             GameObject.Destroy(empowermentBar.gameObject, 0.2f);
             GameObject.Destroy(gameObject, 0.2f);
         }
+
+        
 
         healthBar.value = health;
         empowermentBar.value = empowermentValue;
@@ -164,9 +183,9 @@ public class Combatant : MonoBehaviour
 	#region HealthManagement
 	public float Health { get => health; }
     
-    public bool TakeDamage(float dmg, EmpowermentType attackerType)
+    public bool TakeDamage(float dmg, float empowermentMultiplier, EmpowermentType attackerType)
 	{
-        AdjustEmpowermentOnDamageTaken(attackerType);
+        AdjustEmpowermentOnDamageTaken(empowermentMultiplier, attackerType);
 
         health -= dmg;    
         if (health <= 0)
@@ -181,35 +200,98 @@ public class Combatant : MonoBehaviour
 	}
 	#endregion
 
-	private void AdjustEmpowermentOnDamageTaken(EmpowermentType attackerType)
+	#region Empowerment Adjustments
+	private void AdjustEmpowermentOnDamageTaken(float empowermentMultiplier, EmpowermentType attackerType)
 	{
-		if (empowermentType == attackerType)
+        if (isEmpowered)
 		{
-            empowermentValue += empowermentGainOnSameTypeDamage;
+            AddToEmpowermentValue(-empowermentGainOnTakingDamage * empowermentMultiplier);
+		}
+		else if (empowermentType == attackerType)
+		{
+            AddToEmpowermentValue(empowermentGainOnTakingDamage * empowermentMultiplier);
 		}
         //The reason that I used else if instaed of else is to make adding more types possible. As not all types will be opposite of each.
 		else if (empowermentType == EmpowermentType.HOLY & attackerType == EmpowermentType.CURSE)
 		{
-            empowermentValue -= empowermentLossOnOppositeTypeDamage;
+            AddToEmpowermentValue(-empowermentGainOnTakingDamage * empowermentMultiplier);
 		}
         else if (empowermentType == EmpowermentType.CURSE & attackerType == EmpowermentType.HOLY)
         {
-            empowermentValue -= empowermentLossOnOppositeTypeDamage;
+            AddToEmpowermentValue(-empowermentGainOnTakingDamage * empowermentMultiplier);
         }
     }
 
+    private void AddToEmpowermentValue(float add)
+	{
+        empowermentValue += add;
+		if (empowermentValue > 100f)
+		{
+            empowermentValue = 100f;
+		}
+        else if (empowermentValue < 0)
+		{
+            empowermentValue = 0f;
+		}
+
+        isEmpowered = (empowermentValue > empowermentStateEntryValue);
+		if (isEmpowered)
+		{
+            gameObject.transform.position = empoweredPos.position;
+		}
+		else
+		{
+            gameObject.transform.position = normalPos.position;
+		}
+    }
+    #endregion
 
     public bool BasicAttack(Combatant target)
 	{
-        empowermentValue += empowermentIncreaseOnAttack;
-        return target.TakeDamage(DealDmg(), empowermentType);
+        BacklashDamage();
+
+        AddToEmpowermentValue(empowermentIncreaseOnAttack);
+		
+        return target.TakeDamage(DealDmg(), empowermentMultiplier: 1f, empowermentType);
     }
 
     public bool EmpoweringAttack(Combatant target)
 	{
-        empowermentValue += empowermentMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack;
-        return target.TakeDamage((1/empowermentMultiplierOnEmpoweringAttack) * DealDmg(), empowermentType);
+        BacklashDamage();
+
+		if (isEmpowered)
+		{
+            AddToEmpowermentValue(- damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack);
+        }
+        else
+		{
+            AddToEmpowermentValue(damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack);
+
+        }
+
+        return target.TakeDamage((1/damageMultiplierOnEmpoweringAttack) * DealDmg(), empowermentMultiplier: 1f, empowermentType);
 	}
+
+    public bool MultiAttack(Combatant target)
+	{
+        BacklashDamage();
+
+        AddToEmpowermentValue(-empowermentIncreaseOnAttack);
+
+        return target.TakeDamage(DealDmg(), empowermentMultiplier: 2f, empowermentType);
+	}
+
+    private void BacklashDamage()
+	{
+        if (isEmpowered)
+        {
+            TakeDamage(empowermentBacklashDamage, empowermentMultiplier: 0, empowermentType);
+            if (health < 1)
+            {
+                health = 1f;
+            }
+        }
+    }
 
     protected float DealDmg()
 	{
@@ -226,7 +308,7 @@ public class Combatant : MonoBehaviour
     public string CombatantName { get => combatantName; set => combatantName = value; }
     public float Agility { get => agility; set => agility = value; }
     public bool HasAttacked { get => hasAttacked; set => hasAttacked = value; }
-
+    public bool IsEmpowered { get => isEmpowered; }
     public bool getisAlly ()
 	{
         return isAlly;
