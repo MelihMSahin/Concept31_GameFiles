@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Out-Of-Combat.unity
     guid: bfc6789e02681c341b312f31203c6cb0
   - enabled: 1
