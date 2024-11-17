@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class Combatant : MonoBehaviour
 {
     [SerializeField]
     private string combatantName;
+
+    public TextMeshProUGUI nameTextBox;
 
 	#region lvl variables
 	[Space]
@@ -82,6 +85,10 @@ public class Combatant : MonoBehaviour
 	{
         health = healthMax;
         SetPositionVars();
+
+        //Display the name in combat
+        //Display the name in combat
+        nameTextBox.text = combatantName;
 	}
 
     private void SetPositionVars()
@@ -135,15 +142,19 @@ public class Combatant : MonoBehaviour
     {
         if (!isAlive)
 		{
-            GameObject.Destroy(healthBar.gameObject, 0.2f);
-            GameObject.Destroy(empowermentBar.gameObject, 0.2f);
-            GameObject.Destroy(gameObject, 0.2f);
+            DestroyOnDeath();
         }
-
-        
 
         healthBar.value = health;
         empowermentBar.value = empowermentValue;
+    }
+
+    private void DestroyOnDeath()
+	{
+        GameObject.Destroy(healthBar.gameObject, 0.2f);
+        GameObject.Destroy(empowermentBar.gameObject, 0.2f);
+        GameObject.Destroy(nameTextBox.gameObject, 0.2f);
+        GameObject.Destroy(gameObject, 0.2f);
     }
 
 	#region Set Bars
