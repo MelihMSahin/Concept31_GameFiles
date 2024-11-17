@@ -17,6 +17,7 @@ public class TurnManager : MonoBehaviour
 	#region UI Variables
 	[Space]
 	[Header("UI")]
+	public TextMeshProUGUI[] combatantNameTextBoxes;
 	public Slider[] healthBars;
 	public Slider[] empowermentBars;
 	public Button[] abilityButtons;
@@ -90,6 +91,16 @@ public class TurnManager : MonoBehaviour
 		SetButtonNames();
 		SetSliders();
 		StartCoroutine(Introduction());
+
+		SetCombatantNameText();
+	}
+
+	public void SetCombatantNameText()
+	{
+		for (int i = 0; i < combatantsArray.Length; i++)
+		{
+			combatantsArray[i].nameTextBox = combatantNameTextBoxes[i];
+		}
 	}
 
 	public void SetTargetConfirmArray(int size)
