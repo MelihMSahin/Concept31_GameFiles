@@ -26,6 +26,7 @@ public class Combatant : MonoBehaviour
 	[Space]
     [Header("Health Variables")]
     public Slider healthBar;
+    public TextMeshProUGUI healthValueDisplay;
     [SerializeField]
     protected float healthMax = 100f;
     [SerializeField]
@@ -89,7 +90,8 @@ public class Combatant : MonoBehaviour
         //Display the name in combat
         //Display the name in combat
         nameTextBox.text = combatantName;
-	}
+        healthValueDisplay = healthBar.GetComponentInChildren<TextMeshProUGUI>();
+    }
 
     private void SetPositionVars()
 	{
@@ -125,8 +127,9 @@ public class Combatant : MonoBehaviour
         agility = Random.Range(1, 100);
         attackPower = Random.Range(10, 30);
         empowermentValue = Random.Range(0f, 79f);
-		#region random empowerment type
-		if (Random.Range(0,10) < 5)
+        empowermentBacklashDamage = attackPower / 2;
+        #region random empowerment type
+        if (Random.Range(0,10) < 5)
 		{
             empowermentType = EmpowermentType.CURSE;
 		}
@@ -146,6 +149,7 @@ public class Combatant : MonoBehaviour
         }
 
         healthBar.value = health;
+        healthValueDisplay.text = health.ToString();
         empowermentBar.value = empowermentValue;
     }
 
@@ -198,6 +202,7 @@ public class Combatant : MonoBehaviour
 	{
         AdjustEmpowermentOnDamageTaken(empowermentMultiplier, attackerType);
 
+        Debug.Log(dmg);
         health -= dmg;    
         if (health <= 0)
 		{
