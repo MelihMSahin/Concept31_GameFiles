@@ -43,13 +43,9 @@ public class Combatant : MonoBehaviour
     private float empowermentValue = 0f;
     private float empowermentMax = 100f;
     private float empowermentStateEntryValue = 80f;
-
-
     private float empowermentGainOnTakingDamage = 5f;
-
     private float empowermentIncreaseOnAttack = 20f;
     private float damageMultiplierOnEmpoweringAttack = 2f;
-
     private float empowermentBacklashDamage = 5f;
     [SerializeField]
     private bool isEmpowered = false;
@@ -290,12 +286,21 @@ public class Combatant : MonoBehaviour
 
     public bool MultiAttack(Combatant target)
 	{
-        BacklashDamage();
+        MultiAttackBacklashDamage();
 
         AddToEmpowermentValue(-empowermentIncreaseOnAttack);
 
         return target.TakeDamage(DealDmg(), empowermentMultiplier: 2f, empowermentType);
 	}
+
+    private void MultiAttackBacklashDamage()
+	{
+        TakeDamage(empowermentBacklashDamage, empowermentMultiplier: 0, empowermentType);
+        if (health < 1)
+        {
+            health = 1f;
+        }
+    }
 
     private void BacklashDamage()
 	{
