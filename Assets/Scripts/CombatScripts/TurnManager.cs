@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 using TMPro;
 
 
@@ -37,6 +38,7 @@ public class TurnManager : MonoBehaviour
     public Combatant[] combatantsArray;
 	public GameObject allyPrefab;
 	public GameObject enemyPrefab;
+	public float empoweredAttackChance = 5f;
 	#endregion
 
 	#region Indicators
@@ -267,14 +269,43 @@ public class TurnManager : MonoBehaviour
 		//Enemy chooses an attack
 		yield return new WaitForSecondsRealtime(2);
 		turnState = TurnState.ENEMYACTION;
-		Combatant target = FindTargetPlayer();
-		turnExplainer.text = nextAttacker.CombatantName + " chooses to attack " + target.CombatantName;
-		yield return new WaitForSecondsRealtime(3);
 
-		if (nextAttacker.BasicAttack(target))
+		#region MultiAttack
+		if (nextAttacker.IsEmpowered)
 		{
-			combatantsArray = RemoveCombatantFromArray(target);
+			foreach (Combatant combatant in combatantsArray)
+			{
+				if (combatant is PlayerCombatant)
+				{
+					if (nextAttacker.MultiAttack(combatant))
+					{
+						combatantsArray = RemoveCombatantFromArray(combatant);
+					}
+				}
+			}
 		}
+		#endregion
+		
+		else
+		{
+			Combatant target = FindTargetPlayer();
+			turnExplainer.text = nextAttacker.CombatantName + " chooses to attack " + target.CombatantName;
+			yield return new WaitForSecondsRealtime(3);
+
+
+			if (Random.Range(0, 10) > empoweredAttackChance)
+			{
+				if (nextAttacker.EmpoweringAttack(target))
+				{
+					combatantsArray = RemoveCombatantFromArray(target);
+				}
+			}
+			else if (nextAttacker.BasicAttack(target))
+			{
+				combatantsArray = RemoveCombatantFromArray(target);
+			}
+		}
+
 		yield return new WaitForSecondsRealtime(2);
 
 		//Update text to notify the user of what happened.
@@ -435,8 +466,6 @@ public class TurnManager : MonoBehaviour
 		StartCoroutine(PlayerTargetAndAttack(targetNo));
 	}
 	#endregion
-
-
 
 	#region Player Target and Attack
 	IEnumerator PlayerMultiAttack()
