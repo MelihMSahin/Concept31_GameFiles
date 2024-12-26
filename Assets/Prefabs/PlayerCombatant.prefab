@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3884398067665158686}
   - component: {fileID: 816302594355449012}
   - component: {fileID: 103027453877600621}
-  - component: {fileID: 5599144519756374440}
+  - component: {fileID: 1651152304387388787}
   m_Layer: 0
   m_Name: PlayerCombatant
   m_TagString: Untagged
@@ -108,7 +108,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5599144519756374440
+--- !u!114 &1651152304387388787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,23 +120,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919107878922fe04cb5e56fbf529cd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  combatantName: Me
+  combatantName: 
+  nameTextBox: {fileID: 0}
   lvl: 1
   experiencePoints: 0
   healthBar: {fileID: 0}
+  healthValueDisplay: {fileID: 0}
   healthMax: 100
   health: 100
-  attackPower: 10
-  agility: 60
+  empowermentBar: {fileID: 0}
+  empowermentType: 0
+  empowermentValue: 0
+  isEmpowered: 0
+  attackPower: 20
+  agility: 10
   isAlly: 0
   hasAttacked: 0
   isAlive: 1
+  normalPos: {fileID: 0}
+  empoweredPos: {fileID: 0}

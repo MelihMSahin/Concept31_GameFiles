@@ -8,7 +8,7 @@ using TMPro;
 public class Combatant : MonoBehaviour
 {
     [SerializeField]
-    private string combatantName;
+    protected string combatantName;
 
     public TextMeshProUGUI nameTextBox;
 
@@ -78,7 +78,7 @@ public class Combatant : MonoBehaviour
         RandomiseStats();
     }
 
-	protected void Start()
+	public void StartCombatant()
 	{
         health = healthMax;
         SetPositionVars();
@@ -198,7 +198,6 @@ public class Combatant : MonoBehaviour
 	{
         AdjustEmpowermentOnDamageTaken(empowermentMultiplier, attackerType);
 
-        Debug.Log(dmg);
         health -= dmg;    
         if (health <= 0)
 		{

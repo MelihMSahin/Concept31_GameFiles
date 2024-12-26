@@ -1879,7 +1879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &504025432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,6 +3547,8 @@ MonoBehaviour:
   combatantsArray: []
   allyPrefab: {fileID: 5773869299035246147, guid: f747c2f0c85d5c6439b509eb579c77f2, type: 3}
   enemyPrefab: {fileID: 8062130399557547671, guid: b12a7bd8a0745eb4495209764a85b6b0, type: 3}
+  empoweredAttackChance: 5
+  playerCombatantDataArray: []
   turnOrderIndicator: {fileID: 1446747886861520237, guid: 90884b719b6dd3a468bfbfeca042b0c6, type: 3}
   targetIndicator: {fileID: 1446747886861520237, guid: a744f313549463b41ae136f7ce1f0e93, type: 3}
 --- !u!1 &843146482

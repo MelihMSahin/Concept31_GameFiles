@@ -8,5 +8,7 @@ public class PlayerCombatant : Combatant
 	{
 		isAlly = true;
 		RandomiseStats();
+		gameObject.GetComponent<PlayerCombatant>().enabled = false;
 	}
+
 }
