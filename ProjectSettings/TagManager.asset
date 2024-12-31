@@ -9,6 +9,7 @@ TagManager:
   - TurnIndicator
   - CombatTrigger
   - CombatantData
+  - Data
   layers:
   - Default
   - TransparentFX

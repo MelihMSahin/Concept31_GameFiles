@@ -9,7 +9,8 @@ public class PlayerCombatantData : MonoBehaviour
 
 	private void Awake()
 	{
-        DontDestroyOnLoad(gameObject);
+        //Moved DontDestroyOnLoad to scene transition triggers
+        //DontDestroyOnLoad(gameObject);
     }
 
 	void Start()

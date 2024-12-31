@@ -5,6 +5,6 @@ public class resetGame : MonoBehaviour
 {
     public void ResetGame()
 	{
-		SceneManager.LoadScene("Combat");
+		SceneManager.LoadScene("Out-Of-Combat");
 	}
 }

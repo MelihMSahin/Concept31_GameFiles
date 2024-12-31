@@ -58,17 +58,19 @@ public class Combatant : MonoBehaviour
     protected float attackPower = 20f;
 	[SerializeField]
     private float agility = 10f;
-	#endregion
+    #endregion
 
-	#region Combat Management Variables
-	[Space]
+    #region Combat Management Variables
+    [Space]
     [Header("Combat Management Variables")]
+    protected GameObject combatantData;
     [SerializeField]
     protected bool isAlly = false;
     [SerializeField]
     private bool hasAttacked = false;
     [SerializeField]
     private bool isAlive = true;
+    private bool isDead = false; //To stop duplicate deaths
     public Transform normalPos;
     public Transform empoweredPos;
 	#endregion
@@ -139,23 +141,48 @@ public class Combatant : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate()
     {
-        if (!isAlive)
-		{
-            DestroyOnDeath();
+        if (combatantData == null)
+        {
+            combatantData = GameObject.FindGameObjectWithTag("CombatantData");
         }
 
-        healthBar.value = health;
-        healthValueDisplay.text = health.ToString();
-        empowermentBar.value = empowermentValue;
+        if (!isAlive && !isDead)
+		{
+            isDead = true;
+            OnDeath();
+        }
+
+		if (healthBar != null)
+		{
+            healthBar.value = health;
+            healthValueDisplay.text = health.ToString();
+            empowermentBar.value = empowermentValue;
+        }
     }
 
-    private void DestroyOnDeath()
+	#region DeathManagement
+    public virtual void OnDeath()
 	{
-        GameObject.Destroy(healthBar.gameObject, 0.2f);
-        GameObject.Destroy(empowermentBar.gameObject, 0.2f);
-        GameObject.Destroy(nameTextBox.gameObject, 0.2f);
-        GameObject.Destroy(gameObject, 0.2f);
+        DestroyOnDeath();
+        GameObject.Destroy(gameObject, 0.4f);
     }
+
+	protected void DestroyOnDeath()
+	{
+		if (healthBar != null)
+		{
+            GameObject.Destroy(healthBar.gameObject, 0.2f);
+        }
+		if (empowermentBar != null)
+		{
+            GameObject.Destroy(empowermentBar.gameObject, 0.2f);
+        }
+		if (nameTextBox != null)
+		{
+            GameObject.Destroy(nameTextBox.gameObject, 0.2f);
+        }
+    }
+	#endregion
 
 	#region Set Bars
 	public void SetHealthBar(Slider slider)
@@ -329,8 +356,5 @@ public class Combatant : MonoBehaviour
     public float Agility { get => agility; set => agility = value; }
     public bool HasAttacked { get => hasAttacked; set => hasAttacked = value; }
     public bool IsEmpowered { get => isEmpowered; }
-    public bool getisAlly ()
-	{
-        return isAlly;
-	}
+    public bool getisAlly () { return isAlly; }
 }

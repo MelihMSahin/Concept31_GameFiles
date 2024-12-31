@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 public class TurnManager : MonoBehaviour
 {
@@ -235,7 +235,9 @@ public class TurnManager : MonoBehaviour
 		{
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
+			SaveCombatants();
 			endText.text = "Congratulations! You won!";
+			StartCoroutine("ExitCombat");
 		}
 
 		if (turnState == TurnState.LOST)
@@ -243,17 +245,33 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			endText.text = "You lost.";
+			StartCoroutine("ExitCombat");
 		}
 		#endregion
 	}
 
 	#region Game Won/Lost
+	IEnumerator ExitCombat()
+	{
+		yield return new WaitForSecondsRealtime(3f);
+		SceneManager.LoadScene("Out-Of-Combat");
+	}
+	private void SaveCombatants()
+	{
+		foreach (Combatant combatant in combatantsArray)
+		{
+			if (combatant is PlayerCombatant)
+			{
+				combatant.OnDeath();
+			}
+		}
+	}
+
 	private bool CheckIfPlayerLeft()
 	{
 		bool isPlayerLeft = false;
 		foreach (Combatant combatant in combatantsArray)
 		{
-
 			if (combatant is PlayerCombatant)
 			{
 				isPlayerLeft = true;
