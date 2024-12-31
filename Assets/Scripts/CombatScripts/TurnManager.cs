@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 public class TurnManager : MonoBehaviour
 {
@@ -39,6 +39,7 @@ public class TurnManager : MonoBehaviour
 	public GameObject allyPrefab;
 	public GameObject enemyPrefab;
 	public float empoweredAttackChance = 5f;
+	public PlayerCombatant[] playerCombatantDataArray;
 	#endregion
 
 	#region Indicators
@@ -61,22 +62,34 @@ public class TurnManager : MonoBehaviour
 	{
 		endCanvas.gameObject.SetActive(false);
 		turnState = TurnState.START;
+
+		playerCombatantDataArray = (GameObject.FindGameObjectWithTag("CombatantData")).GetComponentsInChildren<PlayerCombatant>();
+
 		InstantiateCombatants();
 		nextAttacker = null;
 	}
 
+
+
 	private void InstantiateCombatants()
 	{
 		positionsArray = positionsParent.GetComponentsInChildren<Transform>();
-		for (int i = 0; i < 3; i++)
+
+		
+
+		int j = 0;
+		foreach (PlayerCombatant combatant in playerCombatantDataArray)
 		{
-			GameObject temp = Instantiate(allyPrefab, gameObject.transform);
-			temp.transform.position = positionsArray[i+1].position;
+			combatant.transform.parent = gameObject.transform;
+			combatant.transform.position = positionsArray[j + 1].position;
+			j += 1;
+			combatant.enabled = true;
 		}
+		
 		for (int i = 3; i < 6; i++)
 		{
 			GameObject temp = Instantiate(enemyPrefab, gameObject.transform);
-			temp.transform.position = positionsArray[i+1].position;
+			temp.transform.position = positionsArray[i+1].position;	
 		}
 	}
 
@@ -97,11 +110,13 @@ public class TurnManager : MonoBehaviour
 		SetCombatantNameText();
 	}
 
+
 	public void SetCombatantNameText()
 	{
 		for (int i = 0; i < combatantsArray.Length; i++)
 		{
 			combatantsArray[i].nameTextBox = combatantNameTextBoxes[i];
+			combatantsArray[i].StartCombatant();
 		}
 	}
 
@@ -220,7 +235,9 @@ public class TurnManager : MonoBehaviour
 		{
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
+			SaveCombatants();
 			endText.text = "Congratulations! You won!";
+			StartCoroutine("ExitCombat");
 		}
 
 		if (turnState == TurnState.LOST)
@@ -228,17 +245,33 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			endText.text = "You lost.";
+			StartCoroutine("ExitCombat");
 		}
 		#endregion
 	}
 
 	#region Game Won/Lost
+	IEnumerator ExitCombat()
+	{
+		yield return new WaitForSecondsRealtime(3f);
+		SceneManager.LoadScene("Out-Of-Combat");
+	}
+	private void SaveCombatants()
+	{
+		foreach (Combatant combatant in combatantsArray)
+		{
+			if (combatant is PlayerCombatant)
+			{
+				combatant.OnDeath();
+			}
+		}
+	}
+
 	private bool CheckIfPlayerLeft()
 	{
 		bool isPlayerLeft = false;
 		foreach (Combatant combatant in combatantsArray)
 		{
-
 			if (combatant is PlayerCombatant)
 			{
 				isPlayerLeft = true;
