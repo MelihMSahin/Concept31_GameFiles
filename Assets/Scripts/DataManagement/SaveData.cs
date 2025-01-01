@@ -14,6 +14,11 @@ public class SaveData : MonoBehaviour
     [SerializeField]
     private bool isThereCombatantData;
 
+    [Space]
+    public GameObject playerObject;
+    public Vector3 playerPosition;
+    bool Bool = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,9 +39,22 @@ public class SaveData : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-		
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null && Bool)
+		{
+            playerObject.transform.position = playerPosition;
+            Bool = false;
+        }
+		else if (playerObject == null)
+		{
+            Bool = true;
+		}
+		else
+		{
+            playerPosition = playerObject.transform.position;
+		}
     }
 
     public bool IsTestCombatDone { get => isTestCombatDone; set => isTestCombatDone = value; }
