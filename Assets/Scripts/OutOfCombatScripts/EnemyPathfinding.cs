@@ -12,7 +12,12 @@ public class EnemyPathfinding : MonoBehaviour
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     [SerializeField]  private Vector2 moveDir;
+=======
+    [SerializeField] protected Vector2 moveDir;
+
+>>>>>>> Stashed changes
 =======
     [SerializeField] protected Vector2 moveDir;
 
@@ -129,6 +134,9 @@ public class EnemyPathfinding : MonoBehaviour
     protected float Normalise(float a, float b)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
