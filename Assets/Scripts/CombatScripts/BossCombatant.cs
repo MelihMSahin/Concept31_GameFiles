@@ -2,20 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCombatant : Combatant
+public class BossCombatant : Combatant
 {
-	private bool isNew = true;
-
-	private void Awake()
-	{
-		isAlly = true;
-		if (isNew)
-		{
-			RandomiseStats();
-		}
-		gameObject.GetComponent<PlayerCombatant>().enabled = false;
-	}
-
     protected override void RandomiseStats()
     {
         string[] names = { "Harry", "Ross",
@@ -34,12 +22,12 @@ public class PlayerCombatant : Combatant
                         "Shirley" };
         combatantName = names[Random.Range(0, names.Length)];
 
-        int points = 400;
+        int points = 200;
 
         int attackPoints = Random.Range(0, points / 2);
         points -= attackPoints;
-        attackPower = attackPoints / 10 + 20;
-        empowermentBacklashDamage = attackPower/2;
+        attackPower = attackPoints / 10 + 10;
+        empowermentBacklashDamage = attackPower / 2;
 
         int agilityPoints = Random.Range(0, points / 2);
         points -= agilityPoints;
@@ -61,21 +49,4 @@ public class PlayerCombatant : Combatant
         }
         #endregion
     }
-
-    public override void OnDeath()
-	{
-		this.transform.position = new Vector3(0, -100f, 0);
-		if (health < 0)
-		{
-			health = 1;
-		}
-		this.transform.parent = combatantData.transform;
-		DestroyOnDeath();
-		if (this.transform.childCount > 0)
-		{
-			Destroy(this.transform.GetChild(0).gameObject);
-		}
-	}
-
-	public bool IsNew { get => isNew; set => isNew = value; }
 }

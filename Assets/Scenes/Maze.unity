@@ -416,7 +416,8 @@ MonoBehaviour:
   CellWidth: 10
   CellHeight: 10
   AddGaps: 0
-  GoalPrefab: {fileID: 3551885294994406803, guid: 38793fe2f9b6f904da60a7868aff7986, type: 3}
+  EnemyPrefab: {fileID: 3551885294994406803, guid: 38793fe2f9b6f904da60a7868aff7986, type: 3}
+  GoalPrefab: {fileID: 3551885294994406803, guid: 3d65caf8c3915bc4f90e5586a829fd32, type: 3}
 --- !u!115 &999177115
 MonoScript:
   m_ObjectHideFlags: 0
