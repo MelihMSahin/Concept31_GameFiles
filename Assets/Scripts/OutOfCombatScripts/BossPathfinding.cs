@@ -13,7 +13,7 @@ public class BossPathfinding : EnemyPathfinding
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
-                speed *= 2;
+                speed *= -2;
                 //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.yellow);
                 rigidbody.velocity = new Vector3(Normalise(player.position.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(player.position.z, transform.position.z) * speed);
             }

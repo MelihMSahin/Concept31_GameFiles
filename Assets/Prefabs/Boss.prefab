@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c04152f00ad1f6e46adb56dd512e7284, type: 2}
+  - {fileID: 2100000, guid: 0f4f2e5b7cb40a24bb8dcf3055bd675d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,10 +147,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f319e0cecc80744b9d9adc105450701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
+  rigidbody: {fileID: 4477275830579418811}
   player: {fileID: 0}
   moveDir: {x: 0, y: 0}
-  moveSpeed: 2
+  moveSpeed: 10
   maxWait: 5
 --- !u!135 &1796314966803694169
 SphereCollider:

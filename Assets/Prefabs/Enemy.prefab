@@ -150,7 +150,7 @@ MonoBehaviour:
   rigidbody: {fileID: 4477275830579418811}
   player: {fileID: 0}
   moveDir: {x: 0, y: 0}
-  moveSpeed: 2
+  moveSpeed: 5
   maxWait: 5
 --- !u!135 &1796314966803694169
 SphereCollider:
