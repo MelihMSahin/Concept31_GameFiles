@@ -154,7 +154,7 @@ MonoBehaviour:
   CoinSound: {fileID: 8300000, guid: 50dee191f1af3994c99e69c8c4e2c104, type: 3}
   toatlCameraOffsetMultiplier: 3
   cameraOffsetUpMultiplier: 4
-  movementSpeed: 5
+  movementSpeed: 10
 --- !u!82 &3179440220132300703
 AudioSource:
   m_ObjectHideFlags: 0

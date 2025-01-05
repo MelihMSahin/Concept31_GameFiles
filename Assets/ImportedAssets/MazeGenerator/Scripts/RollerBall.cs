@@ -90,6 +90,7 @@ public class RollerBall : MonoBehaviour {
 		}
 	}
 
+	/*
 	void OnCollisionEnter(Collision coll){
 		if (coll.gameObject.tag.Equals ("Floor")) {
 			mFloorTouched = true;
@@ -107,14 +108,17 @@ public class RollerBall : MonoBehaviour {
 		if (coll.gameObject.tag.Equals ("Floor")) {
 			mFloorTouched = false;
 		}
-	}
+	}*/
 
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Enemy"))
 		{
 			SceneManager.LoadScene("Combat");
 		}
-
+		else if (other.CompareTag("Boss"))
+		{
+			SceneManager.LoadScene("BossCombat");
+		}
 		/*
 		if (other.gameObject.tag.Equals ("Coin")) {
 			if(mAudioSource != null && CoinSound != null){
