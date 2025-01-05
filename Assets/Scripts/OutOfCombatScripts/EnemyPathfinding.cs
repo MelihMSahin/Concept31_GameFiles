@@ -9,8 +9,7 @@ public class EnemyPathfinding : MonoBehaviour
     public Transform player;
 
     private Vector2[] directions = { Vector2.right, Vector2.down, Vector2.left, Vector2.right, new Vector2(1,1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(-1, -1)};
-    [SerializeField] protected Vector2 moveDir;
-
+    [SerializeField]  private Vector2 moveDir;
     public float moveSpeed;
     public float maxWait;
 
@@ -56,23 +55,7 @@ public class EnemyPathfinding : MonoBehaviour
         
     }
 
-    protected virtual void PlayerHit(float speed)
-	{
-        lastPlayerPosition = player.position;
-        isAtLastPlayerPosition = false;
-        rigidbody.velocity = new Vector3(Normalise(player.position.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(player.position.z, transform.position.z) * speed);
-    }
-
-    protected virtual void LastSeenPos(float speed)
-	{
-        rigidbody.velocity = new Vector3(Normalise(lastPlayerPosition.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(lastPlayerPosition.z, transform.position.z) * speed);
-        if (lastPlayerPosition.magnitude - transform.position.magnitude < 3)
-        {
-            isAtLastPlayerPosition = true;
-        }
-    }
-
-    protected float Normalise(float a, float b)
+    private float Normalise(float a, float b)
 	{
         float numerator = a - b;
         float denomenator = Mathf.Abs(numerator);
