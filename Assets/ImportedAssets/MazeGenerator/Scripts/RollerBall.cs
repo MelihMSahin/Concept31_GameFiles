@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //<summary>
 //Ball movement controlls and simple third-person-style camera
@@ -109,11 +110,17 @@ public class RollerBall : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		if (other.CompareTag("Enemy"))
+		{
+			SceneManager.LoadScene("Combat");
+		}
+
+		/*
 		if (other.gameObject.tag.Equals ("Coin")) {
 			if(mAudioSource != null && CoinSound != null){
 				mAudioSource.PlayOneShot(CoinSound);
 			}
 			Destroy(other.gameObject);
-		}
+		}*/
 	}
 }

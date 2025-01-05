@@ -24,6 +24,7 @@ public class MazeSpawner : MonoBehaviour {
 	public float CellWidth = 5;
 	public float CellHeight = 5;
 	public bool AddGaps = true;
+	public GameObject EnemyPrefab = null;
 	public GameObject GoalPrefab = null;
 
 	private BasicMazeGenerator mMazeGenerator = null;
@@ -50,13 +51,19 @@ public class MazeSpawner : MonoBehaviour {
 			break;
 		}
 		mMazeGenerator.GenerateMaze ();
+
+		int[] goalPos = { Random.Range(0, Rows), Random.Range(0, Columns) };
+
 		for (int row = 0; row < Rows; row++) {
 
 			for(int column = 0; column < Columns; column++){
 				float x = column*(CellWidth+(AddGaps?.2f:0));
 				float z = row*(CellHeight+(AddGaps?.2f:0));
 				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
+
 				cell.IsGoal = false;
+				cell.IsEnemy = false;
+				
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
 				tmp.transform.parent = transform;
@@ -76,7 +83,8 @@ public class MazeSpawner : MonoBehaviour {
 					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
 				}
-				if (Random.Range(0,100) > 90)
+
+				if (row == goalPos[0] && column == goalPos[1])
 				{
 					cell.IsGoal = true;
 					if (cell.IsGoal && GoalPrefab != null)
@@ -85,6 +93,18 @@ public class MazeSpawner : MonoBehaviour {
 						tmp.transform.parent = transform;
 					}
 				}
+
+				if (Random.Range(0,100) > 90)
+				{
+					cell.IsEnemy = true;
+					if (cell.IsEnemy && EnemyPrefab != null && !cell.IsGoal)
+					{
+						tmp = Instantiate(EnemyPrefab, new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
+						tmp.transform.parent = transform;
+					}
+				}
+
+				
 			}
 		}
 		if(Pillar != null){
