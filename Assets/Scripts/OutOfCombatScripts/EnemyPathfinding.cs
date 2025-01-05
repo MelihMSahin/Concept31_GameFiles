@@ -9,27 +9,8 @@ public class EnemyPathfinding : MonoBehaviour
     public Transform player;
 
     private Vector2[] directions = { Vector2.right, Vector2.down, Vector2.left, Vector2.right, new Vector2(1,1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(-1, -1)};
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    [SerializeField]  private Vector2 moveDir;
-=======
     [SerializeField] protected Vector2 moveDir;
 
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
     public float moveSpeed;
     public float maxWait;
 
@@ -49,7 +30,7 @@ public class EnemyPathfinding : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         RaycastHit hit;
 
@@ -59,17 +40,11 @@ public class EnemyPathfinding : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.yellow);
-                lastPlayerPosition = player.position;
-                isAtLastPlayerPosition = false;
-                rigidbody.velocity = new Vector3(Normalise(player.position.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(player.position.z, transform.position.z) * speed);
+                PlayerHit(speed);
             }
 			else if (!isAtLastPlayerPosition)
 			{
-                rigidbody.velocity = new Vector3(Normalise(lastPlayerPosition.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(lastPlayerPosition.z, transform.position.z) * speed);
-				if (lastPlayerPosition.magnitude - transform.position.magnitude < 3)
-				{
-                    isAtLastPlayerPosition = true;
-				}
+                LastSeenPos(speed);
             }
             else
             {
@@ -81,9 +56,52 @@ public class EnemyPathfinding : MonoBehaviour
         
     }
 
-<<<<<<< Updated upstream
-    private float Normalise(float a, float b)
-=======
+    protected virtual void PlayerHit(float speed)
+	{
+        lastPlayerPosition = player.position;
+        isAtLastPlayerPosition = false;
+        rigidbody.velocity = new Vector3(Normalise(player.position.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(player.position.z, transform.position.z) * speed);
+    }
+
+    protected virtual void LastSeenPos(float speed)
+	{
+        rigidbody.velocity = new Vector3(Normalise(lastPlayerPosition.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(lastPlayerPosition.z, transform.position.z) * speed);
+        if (lastPlayerPosition.magnitude - transform.position.magnitude < 3)
+        {
+            isAtLastPlayerPosition = true;
+        }
+    }
+
+    private void Pathfinding()
+	{
+        RaycastHit hit;
+
+        float speed = Random.Range(0.5f, moveSpeed);
+        if (Physics.Raycast(transform.position, player.position - transform.position, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject.CompareTag("Player"))
+            {
+                //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.yellow);
+                lastPlayerPosition = player.position;
+                isAtLastPlayerPosition = false;
+                rigidbody.velocity = new Vector3(Normalise(player.position.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(player.position.z, transform.position.z) * speed);
+            }
+            else if (!isAtLastPlayerPosition)
+            {
+                rigidbody.velocity = new Vector3(Normalise(lastPlayerPosition.x, transform.position.x) * speed, rigidbody.velocity.y, Normalise(lastPlayerPosition.z, transform.position.z) * speed);
+                if (lastPlayerPosition.magnitude - transform.position.magnitude < 3)
+                {
+                    isAtLastPlayerPosition = true;
+                }
+            }
+            else
+            {
+                //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.white);
+                rigidbody.velocity = new Vector3(moveDir.x * speed, rigidbody.velocity.y, moveDir.y * speed);
+            }
+        }
+    }
+
     protected virtual void PlayerHit(float speed)
 	{
         lastPlayerPosition = player.position;
@@ -132,16 +150,6 @@ public class EnemyPathfinding : MonoBehaviour
 
 
     protected float Normalise(float a, float b)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 	{
         float numerator = a - b;
         float denomenator = Mathf.Abs(numerator);
@@ -161,13 +169,9 @@ public class EnemyPathfinding : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player"))
+        if (other.CompareTag("Floor"))
         {
-            //SceneManager.LoadScene("Combat");
-        }
-        else if (other.CompareTag("Floor"))
-        {
-            
+            return;
         }
         else
         {

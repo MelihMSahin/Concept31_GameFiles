@@ -12,6 +12,7 @@ TagManager:
   - Data
   - Floor
   - Coin
+  - Enemy
   layers:
   - Default
   - TransparentFX
