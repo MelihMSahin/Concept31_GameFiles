@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7d1f82a87bb1952409a70451847ae900
+timeCreated: 1431455921
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Animations/coin_rotation.anim
+  uploadId: 66852

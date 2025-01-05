@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6414ea9cfa2ccc24a95c775ffa926968
+timeCreated: 1431541292
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Prefabs/BallPrefab.prefab
+  uploadId: 66852

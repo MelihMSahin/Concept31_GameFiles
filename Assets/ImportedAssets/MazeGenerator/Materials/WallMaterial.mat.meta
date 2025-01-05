@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 47c87a00e35b22140b638d8939ea89bf
+timeCreated: 1429850137
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Materials/WallMaterial.mat
+  uploadId: 66852

@@ -10,6 +10,8 @@ TagManager:
   - CombatTrigger
   - CombatantData
   - Data
+  - Floor
+  - Coin
   layers:
   - Default
   - TransparentFX
@@ -17,9 +19,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Wall
   - 
   - 
   - 

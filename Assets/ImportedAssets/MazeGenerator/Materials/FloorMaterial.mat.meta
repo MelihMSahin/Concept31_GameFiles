@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7a8a2e1823a0ea24eb2bd7253739cefd
+timeCreated: 1429850835
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Materials/FloorMaterial.mat
+  uploadId: 66852

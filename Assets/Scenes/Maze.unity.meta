@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5f66713930f36f84a865122d99889d76
+timeCreated: 1429848467
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/demo.unity
+  uploadId: 66852
