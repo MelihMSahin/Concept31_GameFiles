@@ -9,27 +9,8 @@ public class EnemyPathfinding : MonoBehaviour
     public Transform player;
 
     private Vector2[] directions = { Vector2.right, Vector2.down, Vector2.left, Vector2.right, new Vector2(1,1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(-1, -1)};
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    [SerializeField]  private Vector2 moveDir;
-=======
     [SerializeField] protected Vector2 moveDir;
 
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
-=======
-    [SerializeField] protected Vector2 moveDir;
-
->>>>>>> Stashed changes
     public float moveSpeed;
     public float maxWait;
 
@@ -132,16 +113,6 @@ public class EnemyPathfinding : MonoBehaviour
 
 
     protected float Normalise(float a, float b)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 	{
         float numerator = a - b;
         float denomenator = Mathf.Abs(numerator);
