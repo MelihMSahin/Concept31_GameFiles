@@ -40,13 +40,13 @@ public class Combatant : MonoBehaviour
     public enum EmpowermentType { HOLY, CURSE };
     public EmpowermentType empowermentType;
     [SerializeField]
-    private float empowermentValue = 0f;
+    protected float empowermentValue = 0f;
     private float empowermentMax = 100f;
     private float empowermentStateEntryValue = 80f;
     private float empowermentGainOnTakingDamage = 5f;
     private float empowermentIncreaseOnAttack = 20f;
     private float damageMultiplierOnEmpoweringAttack = 2f;
-    private float empowermentBacklashDamage = 5f;
+    protected float empowermentBacklashDamage = 5f;
     [SerializeField]
     private bool isEmpowered = false;
     #endregion
@@ -57,7 +57,7 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     protected float attackPower = 20f;
 	[SerializeField]
-    private float agility = 10f;
+    protected float agility = 10f;
     #endregion
 
     #region Combat Management Variables
@@ -104,7 +104,7 @@ public class Combatant : MonoBehaviour
      * Random encounter's will use a version that scales with player strength (lvls)
      * Won't be called on Awake so boss encounter's won't be random, instead called by TurnManager of random encounter scenes.
      */
-	protected void RandomiseStats()
+	protected virtual void RandomiseStats()
     {
         string[] names = { "Harry", "Ross",
                         "Bruce", "Cook",
@@ -121,11 +121,23 @@ public class Combatant : MonoBehaviour
                         "Frank", "Butler",
                         "Shirley" };
         combatantName = names[Random.Range(0, names.Length)];
-        healthMax = Random.Range(75, 125);
-        agility = Random.Range(1, 100);
-        attackPower = Random.Range(10, 30);
-        empowermentValue = Random.Range(0f, 79f);
-        empowermentBacklashDamage = attackPower / 2;
+        
+        int points = 100;
+
+        int attackPoints = Random.Range(0, points/2);
+        points -= attackPoints;
+        attackPower = attackPoints/10 + 5;
+        empowermentBacklashDamage = attackPower;
+
+        int agilityPoints = Random.Range(0, points/2);
+        points -= agilityPoints;
+        agility = agilityPoints;
+
+        int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points/5));
+        points -= empowermentPoints;
+        empowermentValue = empowermentPoints * 10;
+
+        healthMax = points;
         #region random empowerment type
         if (Random.Range(0,10) < 5)
 		{
