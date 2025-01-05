@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 //<summary>
 //Ball movement controlls and simple third-person-style camera
@@ -15,13 +16,49 @@ public class RollerBall : MonoBehaviour {
 	private AudioSource mAudioSource = null;
 	private bool mFloorTouched = false;
 
+	[Space]
+	[SerializeField]
+	private float toatlCameraOffsetMultiplier;
+	[SerializeField]
+	private float cameraOffsetUpMultiplier;
+
+	[Space]
+	[Header("Movement")]
+	public PlayerMoveInput playerMove;
+	public float movementSpeed = 5f;
+	private InputAction move;
+	private Vector2 moveDir;
+
+
+	void Awake()
+	{
+		playerMove = new PlayerMoveInput();
+	}
+
 	void Start () {
 		mRigidBody = GetComponent<Rigidbody> ();
 		mAudioSource = GetComponent<AudioSource> ();
 	}
 
+	private void OnEnable()
+	{
+		move = playerMove.Player.Move;
+		move.Enable();
+	}
+
+	private void OnDisable()
+	{
+		move.Disable();
+	}
+
+	void Update()
+	{
+		moveDir = move.ReadValue<Vector2>();
+	}
+
 	void FixedUpdate () {
 		if (mRigidBody != null) {
+			mRigidBody.velocity = new Vector3(moveDir.x * movementSpeed, mRigidBody.velocity.y, moveDir.y * movementSpeed);
 			/*
 			if (Input.GetButton ("Horizontal")) {
 				mRigidBody.AddTorque(Vector3.back * Input.GetAxis("Horizontal")*10);
@@ -38,8 +75,9 @@ public class RollerBall : MonoBehaviour {
 			*/
 		}
 
+		
 		if (ViewCamera != null) {
-			Vector3 direction = (Vector3.up*3+Vector3.back)*2;
+			Vector3 direction = (Vector3.up * cameraOffsetUpMultiplier + Vector3.back) * toatlCameraOffsetMultiplier;
 			RaycastHit hit;
 			Debug.DrawLine(transform.position,transform.position+direction,Color.red);
 			if(Physics.Linecast(transform.position,transform.position+direction,out hit)){
