@@ -18,5 +18,5 @@ public class MazeCell {
 	public bool WallLeft = false;
 	public bool WallBack = false;
 	public bool IsGoal = false;
-	public bool IsEnemy = false;
+	public bool IsEnemy = false; //Is a place to spawn enemies
 }

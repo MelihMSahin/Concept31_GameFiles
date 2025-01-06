@@ -8,7 +8,7 @@ public class PlayerCombatant : Combatant
 
 	private void Awake()
 	{
-		isAlly = true;
+		isAlly = true; //indicates that it is a player combatant
 		if (isNew)
 		{
 			RandomiseStats();
@@ -16,7 +16,7 @@ public class PlayerCombatant : Combatant
 		gameObject.GetComponent<PlayerCombatant>().enabled = false;
 	}
 
-    protected override void RandomiseStats()
+    protected override void RandomiseStats() //Same as the Randomise function in combatants but with greater values
     {
         string[] names = { "Harry", "Ross",
                         "Bruce", "Cook",
@@ -62,7 +62,7 @@ public class PlayerCombatant : Combatant
         #endregion
     }
 
-    public override void OnDeath()
+    public override void OnDeath() //If the combatant dies, it stores them and hides them so they can be used again later.
 	{
 		this.transform.position = new Vector3(0, -100f, 0);
 		if (health < 0)
