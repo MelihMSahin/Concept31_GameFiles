@@ -141,7 +141,6 @@ public class TurnManager : MonoBehaviour
 		{
 			if (!(combatantsArray[i] is PlayerCombatant))
 			{
-
 				TextMeshProUGUI tmp = targetButtons[j].GetComponentInChildren<TextMeshProUGUI>();
 				tmp.text = "Attack: " + combatantsArray[i].CombatantName;
 				j += 1;
@@ -183,7 +182,7 @@ public class TurnManager : MonoBehaviour
 	{
 		#region Combat Loop
 		//Select next attacker
-		if (turnState == TurnState.SELECTION)
+		if (turnState == TurnState.SELECTION) //Find the next attacker
 		{
 			//Debug.Log("SelectionState");
 			DeactivateTargetButtons();
@@ -196,15 +195,15 @@ public class TurnManager : MonoBehaviour
 		if (turnState == TurnState.ACTION)
 		{
 			turnState = TurnState.WAIT;
-			if (!(nextAttacker is PlayerCombatant)) { StartCoroutine(EnemyAttack()); }
+			if (!(nextAttacker is PlayerCombatant)) { StartCoroutine(EnemyAttack()); } //If player is not the next attacker, start ai
 			else 
 			{
 				turnExplainer.text = "It is your fighter: " + nextAttacker.CombatantName + "'s turn to attack!";
-				ActivateAbilityButtons(); 
+				ActivateAbilityButtons(); //Otherwise activate buttons for player to attack
 			}
 		}
 
-		if (turnState == TurnState.ENEMYACTION || turnState == TurnState.ACTION || turnState == TurnState.WAIT) 
+		if (turnState == TurnState.ENEMYACTION || turnState == TurnState.ACTION || turnState == TurnState.WAIT)  //Wait for the attack to finish and end turn (reset to selection)
 		{
 			if (nextAttacker.HasAttacked)
 			{
@@ -236,8 +235,15 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			SaveCombatants();
-			endText.text = "Congratulations! You won!";
-			StartCoroutine("ExitCombat");
+			if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("BossCombat"))
+			{
+				endText.text = "You have won!!!";
+			}
+			else
+			{
+				endText.text = "Congratulations! You survived!";
+				StartCoroutine(ExitCombat());
+			}
 		}
 
 		if (turnState == TurnState.LOST)
@@ -245,7 +251,6 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			endText.text = "You lost.";
-			StartCoroutine("ExitCombat");
 		}
 		#endregion
 	}
@@ -253,10 +258,11 @@ public class TurnManager : MonoBehaviour
 	#region Game Won/Lost
 	IEnumerator ExitCombat()
 	{
-		yield return new WaitForSecondsRealtime(3f);
-		SceneManager.LoadScene("Out-Of-Combat");
+		SaveCombatants();
+		yield return new WaitForSecondsRealtime(1f);
+		SceneManager.LoadScene("Maze");
 	}
-	private void SaveCombatants()
+	private void SaveCombatants() //To allow the stats of player combatants to keep existing until the end of the game.
 	{
 		foreach (Combatant combatant in combatantsArray)
 		{
@@ -267,7 +273,7 @@ public class TurnManager : MonoBehaviour
 		}
 	}
 
-	private bool CheckIfPlayerLeft()
+	private bool CheckIfPlayerLeft() //Checks if player has lost
 	{
 		bool isPlayerLeft = false;
 		foreach (Combatant combatant in combatantsArray)
@@ -280,7 +286,7 @@ public class TurnManager : MonoBehaviour
 		return isPlayerLeft;
 	}
 
-	private bool CheckIfEnemyLeft()
+	private bool CheckIfEnemyLeft() //Checks if enemy has lost
 	{
 		bool isEnemyLeft = false;
 		foreach (Combatant combatant in combatantsArray)
@@ -297,13 +303,14 @@ public class TurnManager : MonoBehaviour
 
 
 	#region Enemy AI
-	IEnumerator EnemyAttack()
+	IEnumerator EnemyAttack() //Starts the enemy's attack
 	{
 		//Enemy chooses an attack
-		yield return new WaitForSecondsRealtime(2);
+		yield return new WaitForSecondsRealtime(1);
 		turnState = TurnState.ENEMYACTION;
 
-		#region MultiAttack
+		//If enemy can, they do a multi attack to hit all players
+		#region MultiAttack 
 		if (nextAttacker.IsEmpowered)
 		{
 			foreach (Combatant combatant in combatantsArray)
@@ -323,10 +330,10 @@ public class TurnManager : MonoBehaviour
 		{
 			Combatant target = FindTargetPlayer();
 			turnExplainer.text = nextAttacker.CombatantName + " chooses to attack " + target.CombatantName;
-			yield return new WaitForSecondsRealtime(3);
+			yield return new WaitForSecondsRealtime(2);
 
 
-			if (Random.Range(0, 10) > empoweredAttackChance)
+			if (Random.Range(0, 10) > empoweredAttackChance) //Random chance for the enemy to do an empowered attack
 			{
 				if (nextAttacker.EmpoweringAttack(target))
 				{
@@ -339,19 +346,19 @@ public class TurnManager : MonoBehaviour
 			}
 		}
 
-		yield return new WaitForSecondsRealtime(2);
+		yield return new WaitForSecondsRealtime(1);
 
 		//Update text to notify the user of what happened.
 		nextButton.gameObject.SetActive(true);
 	}
 
-	public void FinishEnemyAttack()
+	public void FinishEnemyAttack() //allows the player to end enemies attack
 	{
 		nextButton.gameObject.SetActive(false);
 		nextAttacker.HasAttacked = true;
 	}
 
-	public Combatant FindTargetPlayer()
+	public Combatant FindTargetPlayer() //The enemy picks a player as target and returns to player
 	{
 		int noOfPlayerCharacters = NoOfPlayerCharacters();
 		int targetNo = Random.Range(0, noOfPlayerCharacters - 1);
@@ -374,7 +381,7 @@ public class TurnManager : MonoBehaviour
 		return combatantsArray[combatantsArray.Length - 1]; //This should never happen
 	}
 
-	private int NoOfPlayerCharacters()
+	private int NoOfPlayerCharacters() //A simple function to return the number of player combatants left
 	{
 		int noOfPlayerCharacters = 0;
 		foreach (Combatant combatant in combatantsArray)
@@ -501,12 +508,12 @@ public class TurnManager : MonoBehaviour
 	#endregion
 
 	#region Player Target and Attack
-	IEnumerator PlayerMultiAttack()
+	IEnumerator PlayerMultiAttack() //Allows player to multi attack by attacking each enemy one by one
 	{
 		turnExplainer.text = "You used your ultimate move!";
 		string deadNames = "";
 		bool hasKilled = false;
-		yield return new WaitForSecondsRealtime(0.5f);
+		yield return new WaitForSecondsRealtime(0.3f);
 		foreach (Combatant combatant in combatantsArray)
 		{
 			if (!(combatant is PlayerCombatant))
@@ -531,14 +538,14 @@ public class TurnManager : MonoBehaviour
 		nextAttacker.HasAttacked = true;
 	}
 
-	IEnumerator PlayerTargetAndAttack(int targetNo)
+	IEnumerator PlayerTargetAndAttack(int targetNo) //Master function for player attacks
 	{
 		Combatant target = FindTargetEnemy(targetNo);
 		DeconfirmOtherTargets(targetNo);
 
 		if (targetConfirms[targetNo])
 		{
-			if (Attack(target))
+			if (Attack(target)) //If enemy dies remove them from the game
 			{
 				turnExplainer.text = "You killed " + target.CombatantName;
 				DeactivateTargetButtons();
@@ -546,14 +553,15 @@ public class TurnManager : MonoBehaviour
 				combatantsArray = RemoveCombatantFromArray(target);
 			}
 			else { turnExplainer.text = "You attacked " + target.CombatantName; }
+
+			//Turn of the players attacking ability
 			DeactivateTargetButtons();
-			yield return new WaitForSecondsRealtime(1);
+			yield return new WaitForSecondsRealtime(0.5f);
 			nextAttacker.HasAttacked = true;
 			DeconfirmOtherTargets(-1);
 			RemoveTargetIndicators();
-			
 		}
-		else
+		else //Allow the player to switch targets
 		{
 			turnExplainer.text = "Confirm " + target.CombatantName + " as target?";
 			RemoveTargetIndicators();
@@ -562,7 +570,7 @@ public class TurnManager : MonoBehaviour
 		}	
 	}
 
-	private bool Attack(Combatant target)
+	private bool Attack(Combatant target) //Calls the correct attack function according to the enum
 	{
 		if (attackType == AttackType.BASIC)
 		{
@@ -583,7 +591,7 @@ public class TurnManager : MonoBehaviour
 		
 	}
 
-	private Combatant[] RemoveCombatantFromArray(Combatant target)
+	private Combatant[] RemoveCombatantFromArray(Combatant target) //when the combatant dies, it is removed from the game with all it's helpers (like health bar).
 	{
 		int temp = -1;
 		for (int i = 0; i < combatantsArray.Length; i++)
@@ -606,7 +614,7 @@ public class TurnManager : MonoBehaviour
 		return tempArray;
 	}
 
-	public Combatant FindTargetEnemy(int targetNo)
+	public Combatant FindTargetEnemy(int targetNo) //Returns the targeted enemy combatant
 	{
 		int count = 0;
 		int enemyNo = 0;
@@ -639,7 +647,7 @@ public class TurnManager : MonoBehaviour
 		return total;
 	}
 	
-	public void DeconfirmOtherTargets(int currentTarget)
+	public void DeconfirmOtherTargets(int currentTarget) //Allows player to retarget
 	{
 		for (int i = 0; i < targetConfirms.Length; i++)
 		{
@@ -652,7 +660,7 @@ public class TurnManager : MonoBehaviour
 	#endregion
 
 	#region NextAttacker
-	public Combatant NextAttacker()
+	public Combatant NextAttacker() //Finds the enxt attacker and indicates it to the player
 	{
 		nextAttacker = FindNextAttacker();
 		if (nextAttacker == null)
@@ -664,7 +672,7 @@ public class TurnManager : MonoBehaviour
 		return nextAttacker;
 	}
 
-	private Combatant FindNextAttacker()
+	private Combatant FindNextAttacker() //Finds the next attacker by finding the highest agility combatant that hasn't attacked this turn
 	{
 		nextAttacker = null;
 		foreach (Combatant combatant in combatantsArray)
@@ -680,7 +688,7 @@ public class TurnManager : MonoBehaviour
 		return nextAttacker;
 	}
 
-	private void ResetAllAttackers()
+	private void ResetAllAttackers() //when the turn ends, reset everyones has attacked status
 	{
 		foreach (Combatant combatant in combatantsArray)
 		{

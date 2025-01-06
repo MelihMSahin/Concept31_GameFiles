@@ -6,11 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Out-Of-Combat.unity
-    guid: bfc6789e02681c341b312f31203c6cb0
+    path: Assets/Scenes/Maze.unity
+    guid: 5f66713930f36f84a865122d99889d76
   - enabled: 1
     path: Assets/Scenes/Combat.unity
     guid: 5c226f64049db3d409eb5c1c9075785e
+  - enabled: 0
+    path: Assets/Scenes/Out-Of-Combat.unity
+    guid: bfc6789e02681c341b312f31203c6cb0
+  - enabled: 1
+    path: Assets/Scenes/BossCombat.unity
+    guid: 83295d05ae917c847befa0bd5616106d
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: aa00f27f95ba15b4a9d21b57a7534669, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -12,8 +12,6 @@ public class SummonDataObject : MonoBehaviour
 		if (GameObject.FindGameObjectWithTag("Data") == null)
 		{
 			GameObject obj = Instantiate(dataObject, this.transform);
-			obj.transform.parent = null;
-			Debug.Log("Summon object");
 		}
 	}
 }

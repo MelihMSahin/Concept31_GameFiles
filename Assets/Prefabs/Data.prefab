@@ -49,3 +49,5 @@ MonoBehaviour:
   isTestCombatDone: 0
   combatantData: {fileID: 1542628228334381755, guid: affacaa2b942d4741a46be7e5902caa0, type: 3}
   isThereCombatantData: 0
+  playerObject: {fileID: 0}
+  playerPosition: {x: 0, y: 0, z: 0}

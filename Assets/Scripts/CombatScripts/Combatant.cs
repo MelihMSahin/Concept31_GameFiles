@@ -41,13 +41,13 @@ public class Combatant : MonoBehaviour
     public enum EmpowermentType { HOLY, CURSE };
     public EmpowermentType empowermentType;
     [SerializeField]
-    private float empowermentValue = 0f;
+    protected float empowermentValue = 0f;
     private float empowermentMax = 100f;
     private float empowermentStateEntryValue = 80f;
     private float empowermentGainOnTakingDamage = 5f;
     private float empowermentIncreaseOnAttack = 20f;
     private float damageMultiplierOnEmpoweringAttack = 2f;
-    private float empowermentBacklashDamage = 5f;
+    protected float empowermentBacklashDamage = 5f;
     [SerializeField]
     private bool isEmpowered = false;
     #endregion
@@ -58,7 +58,7 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     protected float attackPower = 20f;
 	[SerializeField]
-    private float agility = 10f;
+    protected float agility = 10f;
     #endregion
 
     #region Combat Management Variables
@@ -72,8 +72,11 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     private bool isAlive = true;
     private bool isDead = false; //To stop duplicate deaths
-    public Transform normalPos;
-    public Transform empoweredPos;
+    //public Transform normalPos;
+    //public Transform empoweredPos;
+
+    [Space]
+    public ParticleSystem particleSystem;
 	#endregion
 
 	void Awake()
@@ -91,7 +94,19 @@ public class Combatant : MonoBehaviour
 	public void StartCombatant()
 	{
         health = healthMax;
-        SetPositionVars();
+        
+        particleSystem.Stop();
+        ParticleSystem.MainModule mainModule = particleSystem.main;
+        if (empowermentType == EmpowermentType.HOLY)
+        {
+            mainModule.startColor = Colour(253, 199, 35); //https://www.color-hex.com/color-palette/95552
+        }
+        else if (empowermentType == EmpowermentType.CURSE)
+        {
+            mainModule.startColor = Colour(115, 0, 115); //https://www.color-hex.com/color-palette/83792
+        }
+
+        //SetPositionVars();
 
         //Display the name in combat
         //Display the name in combat
@@ -99,20 +114,16 @@ public class Combatant : MonoBehaviour
         healthValueDisplay = healthBar.GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    private void SetPositionVars()
+    private void SetPositionVars() //The particleSystem now handles this instead
 	{
-        normalPos = new GameObject().transform;
-        empoweredPos = new GameObject().transform;
-        normalPos.position = gameObject.transform.position;
-        empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
+        //normalPos = new GameObject().transform;
+        //empoweredPos = new GameObject().transform;
+        //normalPos.position = gameObject.transform.position;
+        //empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
     }
 
-	/* A temporary function to imporve testing.
-     * The final product will have this overwritten in the player combatant class to carry over data
-     * Random encounter's will use a version that scales with player strength (lvls)
-     * Won't be called on Awake so boss encounter's won't be random, instead called by TurnManager of random encounter scenes.
-     */
-	protected void RandomiseStats()
+	
+	protected virtual void RandomiseStats()
     {
         string[] names = { "Harry", "Ross",
                         "Bruce", "Cook",
@@ -129,11 +140,26 @@ public class Combatant : MonoBehaviour
                         "Frank", "Butler",
                         "Shirley" };
         combatantName = names[Random.Range(0, names.Length)];
-        healthMax = Random.Range(75, 125);
-        agility = Random.Range(1, 100);
-        attackPower = Random.Range(10, 30);
-        empowermentValue = Random.Range(0f, 79f);
-        empowermentBacklashDamage = attackPower / 2;
+        
+        int points = 100; //A point system is used to ensure that randomness won't make a combatant that is tanky, high dps and fast.
+        /* This is achieved by subtracting from the remaining points everytime we choose a value for a stat. So the greater attack power
+         * the combatant has, the less hp they'll have and vice versa
+         */
+
+        int attackPoints = Random.Range(10, points/2);
+        points -= attackPoints;
+        attackPower = attackPoints/5 + 5;
+        empowermentBacklashDamage = attackPower;
+
+        int agilityPoints = Random.Range(0, points/2);
+        points -= agilityPoints;
+        agility = agilityPoints;
+
+        int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points/5));
+        points -= empowermentPoints;
+        empowermentValue = empowermentPoints * 4;
+
+        healthMax = points;
         #region random empowerment type
         if (Random.Range(0,10) < 5)
 		{
@@ -169,13 +195,13 @@ public class Combatant : MonoBehaviour
     }
 
 	#region DeathManagement
-    public virtual void OnDeath()
+    public virtual void OnDeath() //Remove the objext from combat
 	{
         DestroyOnDeath();
         GameObject.Destroy(gameObject, 2f);
     }
 
-	protected void DestroyOnDeath()
+	protected void DestroyOnDeath() //Remove all associated objects from combat
 	{
 		if (healthBar != null)
 		{
@@ -229,7 +255,7 @@ public class Combatant : MonoBehaviour
 	#region HealthManagement
 	public float Health { get => health; }
     
-    public bool TakeDamage(float dmg, float empowermentMultiplier, EmpowermentType attackerType)
+    public bool TakeDamage(float dmg, float empowermentMultiplier, EmpowermentType attackerType) //Reduces the hp by the incoming damage
 	{
         AdjustEmpowermentOnDamageTaken(empowermentMultiplier, attackerType);
 
@@ -252,7 +278,7 @@ public class Combatant : MonoBehaviour
 	#endregion
 
 	#region Empowerment Adjustments
-	private void AdjustEmpowermentOnDamageTaken(float empowermentMultiplier, EmpowermentType attackerType)
+	private void AdjustEmpowermentOnDamageTaken(float empowermentMultiplier, EmpowermentType attackerType) //Adjusts the empowerment value according to the attacker type and combatants empowerment status
 	{
         if (isEmpowered)
 		{
@@ -273,8 +299,8 @@ public class Combatant : MonoBehaviour
         }
     }
 
-    private void AddToEmpowermentValue(float add)
-	{
+    private void AddToEmpowermentValue(float add) //Adjusts the empowerment value according to the attacker type and combatants empowerment status
+    {
         empowermentValue += add;
 		if (empowermentValue > 100f)
 		{
@@ -288,11 +314,13 @@ public class Combatant : MonoBehaviour
         isEmpowered = (empowermentValue > empowermentStateEntryValue);
 		if (isEmpowered)
 		{
-            gameObject.transform.position = empoweredPos.position;
+            //gameObject.transform.position = empoweredPos.position;
+            particleSystem.Play();
 		}
 		else
 		{
-            gameObject.transform.position = normalPos.position;
+            particleSystem.Stop();
+            //gameObject.transform.position = normalPos.position;
 		}
     }
     #endregion
@@ -312,7 +340,7 @@ public class Combatant : MonoBehaviour
 
 		if (isEmpowered)
 		{
-            AddToEmpowermentValue(- damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack);
+            AddToEmpowermentValue(- damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack); //The empowered attack reduces empowerment if empowered
         }
         else
 		{
@@ -320,10 +348,10 @@ public class Combatant : MonoBehaviour
 
         }
 
-        return target.TakeDamage((1/damageMultiplierOnEmpoweringAttack) * DealDmg(), empowermentMultiplier: 1f, empowermentType);
+        return target.TakeDamage((1/damageMultiplierOnEmpoweringAttack) * DealDmg(), empowermentMultiplier: 1f, empowermentType); //Deals reduces damage to the target
 	}
 
-    public bool MultiAttack(Combatant target)
+    public bool MultiAttack(Combatant target) //A function that attacks a simple combatant, is intended to be called multiple times and deals backlash/empowerment accordingly
 	{
         MultiAttackBacklashDamage();
 

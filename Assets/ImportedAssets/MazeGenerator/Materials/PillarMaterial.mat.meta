@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bc278c78615aefa49a317bf62f6526fb
+timeCreated: 1431455316
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Materials/PillarMaterial.mat
+  uploadId: 66852

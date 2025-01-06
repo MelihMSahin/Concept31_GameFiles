@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9de82ec743bb24449a99f5cf1e325d61
+timeCreated: 1431454023
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38689
+  packageName: Maze Generator
+  packageVersion: 1.0
+  assetPath: Assets/MazeGenerator/Prefabs/WallPrefab.prefab
+  uploadId: 66852
