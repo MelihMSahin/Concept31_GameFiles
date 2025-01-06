@@ -620,10 +620,10 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Use WASD or arrows to move the ball.
 
-    Use SPACE to jump.
+    Avoid the red enemies and perserve
+    health.
 
-    Collect
-    coins!'
+    Catch the purple ball, defeat it and win.'
 --- !u!222 &1988816027
 CanvasRenderer:
   m_ObjectHideFlags: 0
