@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossCombatant : Combatant
 {
-    protected override void RandomiseStats()
+    protected override void RandomiseStats() //Greater stats, befitting of a boss. More explanation in Combatant class
     {
         string[] names = { "Harry", "Ross",
                         "Bruce", "Cook",
@@ -35,7 +35,7 @@ public class BossCombatant : Combatant
 
         int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points / 5));
         points -= empowermentPoints;
-        empowermentValue = empowermentPoints * 10;
+        empowermentValue = empowermentPoints * 2W;
 
         healthMax = points;
         #region random empowerment type

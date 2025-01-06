@@ -99,11 +99,7 @@ public class Combatant : MonoBehaviour
         empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
     }
 
-	/* A temporary function to imporve testing.
-     * The final product will have this overwritten in the player combatant class to carry over data
-     * Random encounter's will use a version that scales with player strength (lvls)
-     * Won't be called on Awake so boss encounter's won't be random, instead called by TurnManager of random encounter scenes.
-     */
+	
 	protected virtual void RandomiseStats()
     {
         string[] names = { "Harry", "Ross",
@@ -122,7 +118,10 @@ public class Combatant : MonoBehaviour
                         "Shirley" };
         combatantName = names[Random.Range(0, names.Length)];
         
-        int points = 100;
+        int points = 100; //A point system is used to ensure that randomness won't make a combatant that is tanky, high dps and fast.
+        /* This is achieved by subtracting from the remaining points everytime we choose a value for a stat. So the greater attack power
+         * the combatant has, the less hp they'll have and vice versa
+         */
 
         int attackPoints = Random.Range(0, points/2);
         points -= attackPoints;
@@ -173,13 +172,13 @@ public class Combatant : MonoBehaviour
     }
 
 	#region DeathManagement
-    public virtual void OnDeath()
+    public virtual void OnDeath() //Remove the objext from combat
 	{
         DestroyOnDeath();
         GameObject.Destroy(gameObject, 0.4f);
     }
 
-	protected void DestroyOnDeath()
+	protected void DestroyOnDeath() //Remove all associated objects from combat
 	{
 		if (healthBar != null)
 		{
@@ -233,7 +232,7 @@ public class Combatant : MonoBehaviour
 	#region HealthManagement
 	public float Health { get => health; }
     
-    public bool TakeDamage(float dmg, float empowermentMultiplier, EmpowermentType attackerType)
+    public bool TakeDamage(float dmg, float empowermentMultiplier, EmpowermentType attackerType) //Reduces the hp by the incoming damage
 	{
         AdjustEmpowermentOnDamageTaken(empowermentMultiplier, attackerType);
 
@@ -251,7 +250,7 @@ public class Combatant : MonoBehaviour
 	#endregion
 
 	#region Empowerment Adjustments
-	private void AdjustEmpowermentOnDamageTaken(float empowermentMultiplier, EmpowermentType attackerType)
+	private void AdjustEmpowermentOnDamageTaken(float empowermentMultiplier, EmpowermentType attackerType) //Adjusts the empowerment value according to the attacker type and combatants empowerment status
 	{
         if (isEmpowered)
 		{
@@ -272,8 +271,8 @@ public class Combatant : MonoBehaviour
         }
     }
 
-    private void AddToEmpowermentValue(float add)
-	{
+    private void AddToEmpowermentValue(float add) //Adjusts the empowerment value according to the attacker type and combatants empowerment status
+    {
         empowermentValue += add;
 		if (empowermentValue > 100f)
 		{
@@ -311,7 +310,7 @@ public class Combatant : MonoBehaviour
 
 		if (isEmpowered)
 		{
-            AddToEmpowermentValue(- damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack);
+            AddToEmpowermentValue(- damageMultiplierOnEmpoweringAttack * empowermentIncreaseOnAttack); //The empowered attack reduces empowerment if empowered
         }
         else
 		{
@@ -319,10 +318,10 @@ public class Combatant : MonoBehaviour
 
         }
 
-        return target.TakeDamage((1/damageMultiplierOnEmpoweringAttack) * DealDmg(), empowermentMultiplier: 1f, empowermentType);
+        return target.TakeDamage((1/damageMultiplierOnEmpoweringAttack) * DealDmg(), empowermentMultiplier: 1f, empowermentType); //Deals reduces damage to the target
 	}
 
-    public bool MultiAttack(Combatant target)
+    public bool MultiAttack(Combatant target) //A function that attacks a simple combatant, is intended to be called multiple times and deals backlash/empowerment accordingly
 	{
         MultiAttackBacklashDamage();
 

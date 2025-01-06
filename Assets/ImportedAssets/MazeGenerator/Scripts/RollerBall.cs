@@ -24,7 +24,7 @@ public class RollerBall : MonoBehaviour {
 	private float cameraOffsetUpMultiplier;
 
 	[Space]
-	[Header("Movement")]
+	[Header("Movement")] //New Input system variables
 	public PlayerMoveInput playerMove;
 	public float movementSpeed = 5f;
 	private InputAction move;
@@ -59,7 +59,7 @@ public class RollerBall : MonoBehaviour {
 
 	void FixedUpdate () {
 		if (mRigidBody != null) {
-			mRigidBody.velocity = new Vector3(moveDir.x * movementSpeed, mRigidBody.velocity.y, moveDir.y * movementSpeed);
+			mRigidBody.velocity = new Vector3(moveDir.x * movementSpeed, mRigidBody.velocity.y, moveDir.y * movementSpeed); //Move ball with New Input System
 			/*
 			if (Input.GetButton ("Horizontal")) {
 				mRigidBody.AddTorque(Vector3.back * Input.GetAxis("Horizontal")*10);
@@ -78,7 +78,7 @@ public class RollerBall : MonoBehaviour {
 
 		
 		if (ViewCamera != null) {
-			Vector3 direction = (Vector3.up * cameraOffsetUpMultiplier + Vector3.back) * toatlCameraOffsetMultiplier;
+			Vector3 direction = (Vector3.up * cameraOffsetUpMultiplier + Vector3.back) * toatlCameraOffsetMultiplier; //Variables to be able to adjust realtime
 			RaycastHit hit;
 			Debug.DrawLine(transform.position,transform.position+direction,Color.red);
 			if(Physics.Linecast(transform.position,transform.position+direction,out hit)){
@@ -110,6 +110,7 @@ public class RollerBall : MonoBehaviour {
 		}
 	}*/
 
+	//If collided with enemies, start combat. If boss, start boss combat
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Enemy"))
 		{

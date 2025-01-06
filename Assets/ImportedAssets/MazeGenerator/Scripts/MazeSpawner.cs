@@ -24,8 +24,8 @@ public class MazeSpawner : MonoBehaviour {
 	public float CellWidth = 5;
 	public float CellHeight = 5;
 	public bool AddGaps = true;
-	public GameObject EnemyPrefab = null;
-	public GameObject GoalPrefab = null;
+	public GameObject EnemyPrefab = null; //Enemy To spawn
+	public GameObject GoalPrefab = null; //Goal To spawn
 
 	private BasicMazeGenerator mMazeGenerator = null;
 
@@ -52,7 +52,14 @@ public class MazeSpawner : MonoBehaviour {
 		}
 		mMazeGenerator.GenerateMaze ();
 
-		int[] goalPos = { Random.Range(0, Rows), Random.Range(0, Columns) };
+		int[] goalPos = { Random.Range(0, Rows), Random.Range(0, Columns) }; //Set the boss to summon in a random location
+		while (goalPos[0] == Rows/2 && goalPos[1] == Columns/2) //If goal spawns the same place as the player
+		{
+			//Rerandomise
+			goalPos[0] = Random.Range(0, Rows);
+			goalPos[1] = Random.Range(0, Columns); 
+		}
+		
 
 		for (int row = 0; row < Rows; row++) {
 
@@ -84,8 +91,10 @@ public class MazeSpawner : MonoBehaviour {
 					tmp.transform.parent = transform;
 				}
 
+				//If this is the right position for the goal to spawn
 				if (row == goalPos[0] && column == goalPos[1])
 				{
+					//Indicate that goal is her and spawn it
 					cell.IsGoal = true;
 					if (cell.IsGoal && GoalPrefab != null)
 					{
@@ -94,17 +103,19 @@ public class MazeSpawner : MonoBehaviour {
 					}
 				}
 
+				//Randomly spawn enemies
 				if (Random.Range(0,100) > 90)
 				{
-					cell.IsEnemy = true;
-					if (cell.IsEnemy && EnemyPrefab != null && !cell.IsGoal)
+					if (column != Columns/2 && row != Rows / 2) //Make sure enemies don't spawn at the same place as the player
 					{
-						tmp = Instantiate(EnemyPrefab, new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
-						tmp.transform.parent = transform;
+						cell.IsEnemy = true;
+						if (cell.IsEnemy && EnemyPrefab != null && !cell.IsGoal)
+						{
+							tmp = Instantiate(EnemyPrefab, new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
+							tmp.transform.parent = transform;
+						}
 					}
 				}
-
-				
 			}
 		}
 		if(Pillar != null){
