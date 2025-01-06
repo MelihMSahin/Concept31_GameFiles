@@ -71,8 +71,11 @@ public class Combatant : MonoBehaviour
     [SerializeField]
     private bool isAlive = true;
     private bool isDead = false; //To stop duplicate deaths
-    public Transform normalPos;
-    public Transform empoweredPos;
+    //public Transform normalPos;
+    //public Transform empoweredPos;
+
+    [Space]
+    public ParticleSystem particleSystem;
 	#endregion
 
 	void Awake()
@@ -83,7 +86,19 @@ public class Combatant : MonoBehaviour
 	public void StartCombatant()
 	{
         health = healthMax;
-        SetPositionVars();
+        
+        particleSystem.Stop();
+        ParticleSystem.MainModule mainModule = particleSystem.main;
+        if (empowermentType == EmpowermentType.HOLY)
+        {
+            mainModule.startColor = Colour(253, 199, 35); //https://www.color-hex.com/color-palette/95552
+        }
+        else if (empowermentType == EmpowermentType.CURSE)
+        {
+            mainModule.startColor = Colour(115, 0, 115); //https://www.color-hex.com/color-palette/83792
+        }
+
+        //SetPositionVars();
 
         //Display the name in combat
         //Display the name in combat
@@ -91,12 +106,12 @@ public class Combatant : MonoBehaviour
         healthValueDisplay = healthBar.GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    private void SetPositionVars()
+    private void SetPositionVars() //The particleSystem now handles this instead
 	{
-        normalPos = new GameObject().transform;
-        empoweredPos = new GameObject().transform;
-        normalPos.position = gameObject.transform.position;
-        empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
+        //normalPos = new GameObject().transform;
+        //empoweredPos = new GameObject().transform;
+        //normalPos.position = gameObject.transform.position;
+        //empoweredPos.position = gameObject.transform.position + new Vector3(0, 1, 0);
     }
 
 	
@@ -123,9 +138,9 @@ public class Combatant : MonoBehaviour
          * the combatant has, the less hp they'll have and vice versa
          */
 
-        int attackPoints = Random.Range(0, points/2);
+        int attackPoints = Random.Range(10, points/2);
         points -= attackPoints;
-        attackPower = attackPoints/10 + 5;
+        attackPower = attackPoints/5 + 5;
         empowermentBacklashDamage = attackPower;
 
         int agilityPoints = Random.Range(0, points/2);
@@ -134,7 +149,7 @@ public class Combatant : MonoBehaviour
 
         int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points/5));
         points -= empowermentPoints;
-        empowermentValue = empowermentPoints * 10;
+        empowermentValue = empowermentPoints * 4;
 
         healthMax = points;
         #region random empowerment type
@@ -286,11 +301,13 @@ public class Combatant : MonoBehaviour
         isEmpowered = (empowermentValue > empowermentStateEntryValue);
 		if (isEmpowered)
 		{
-            gameObject.transform.position = empoweredPos.position;
+            //gameObject.transform.position = empoweredPos.position;
+            particleSystem.Play();
 		}
 		else
 		{
-            gameObject.transform.position = normalPos.position;
+            particleSystem.Stop();
+            //gameObject.transform.position = normalPos.position;
 		}
     }
     #endregion

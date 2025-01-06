@@ -11,6 +11,7 @@ public class PlayerCombatantData : MonoBehaviour
 	{
         //Moved DontDestroyOnLoad to scene transition triggers
         //DontDestroyOnLoad(gameObject);
+
     }
 
 	void Start()

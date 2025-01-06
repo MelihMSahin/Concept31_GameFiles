@@ -259,63 +259,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3549f273ff63f754eb749081e517a9fa, type: 2}
---- !u!1 &949568338
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 949568339}
-  - component: {fileID: 949568340}
-  m_Layer: 0
-  m_Name: MazeSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &949568339
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949568338}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &949568340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949568338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dbd480039f60a344bdc0ff90b9d70b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Algorithm: 2
-  FullRandom: 1
-  RandomSeed: 3
-  Floor: {fileID: 165842, guid: 8d3b36f175a633f429d7bda54c76550d, type: 3}
-  Wall: {fileID: 144206, guid: 9de82ec743bb24449a99f5cf1e325d61, type: 3}
-  Pillar: {fileID: 142476, guid: f3f97a2401feba4479a301d6181e9da6, type: 3}
-  Rows: 10
-  Columns: 10
-  CellWidth: 10
-  CellHeight: 10
-  AddGaps: 0
-  EnemyPrefab: {fileID: 3551885294994406803, guid: 38793fe2f9b6f904da60a7868aff7986, type: 3}
-  GoalPrefab: {fileID: 3551885294994406803, guid: 3d65caf8c3915bc4f90e5586a829fd32, type: 3}
 --- !u!115 &999177115
 MonoScript:
   m_ObjectHideFlags: 0
@@ -358,6 +301,7 @@ GameObject:
   - component: {fileID: 1346720326}
   - component: {fileID: 1346720325}
   - component: {fileID: 1346720323}
+  - component: {fileID: 1346720328}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -447,6 +391,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1346720328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346720322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61d70147f616b674fab74757e442139c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mazeSpawner: {fileID: 6975140918998527700, guid: 01c5884a4bfa51646a0565aea4012dfb, type: 3}
 --- !u!1001 &1759586920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -793,7 +750,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2144415893}
-  - {fileID: 949568339}
   - {fileID: 835618750}
   - {fileID: 1759586920}
   - {fileID: 1895491378}

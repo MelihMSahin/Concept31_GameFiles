@@ -45,9 +45,9 @@ public class PlayerCombatant : Combatant
         points -= agilityPoints;
         agility = agilityPoints;
 
-        int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points / 5));
+        int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points / 10));
         points -= empowermentPoints;
-        empowermentValue = empowermentPoints * 10;
+        empowermentValue = empowermentPoints;
 
         healthMax = points;
         #region random empowerment type

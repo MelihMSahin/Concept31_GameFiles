@@ -31,28 +31,34 @@ public class EnemyPathfinding : MonoBehaviour
     // Update is called once per frame
     protected virtual void FixedUpdate()
     {
-        RaycastHit hit;
-
-        float speed = Random.Range(0.5f, moveSpeed);
-		if (Physics.Raycast(transform.position, player.position - transform.position, out hit, Mathf.Infinity)) //Is player visible
-		{
-            if (hit.collider.gameObject.CompareTag("Player")) //If player is visible, chase it
-            {
-                //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.yellow);
-                PlayerHit(speed);
-            }
-			else if (!isAtLastPlayerPosition) //If player was visible, get close to where you last saw it
-			{
-                LastSeenPos(speed);
-            }
-            else //Keep moving in the same direction
-            {
-                //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.white);
-                rigidbody.velocity = new Vector3(moveDir.x * speed, rigidbody.velocity.y, moveDir.y * speed);
-            }
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Maze")) //Stops movement if not in maze scene
+        {
+            rigidbody.velocity = new Vector3(0, 0, 0);
         }
-        //rigidbody.MovePosition(new Vector3(moveDir.x * moveSpeed, transform.position.y, moveDir.y * moveSpeed) + transform.position);
-        
+        else
+		{
+            RaycastHit hit;
+
+            float speed = Random.Range(0.5f, moveSpeed);
+            if (Physics.Raycast(transform.position, player.position - transform.position, out hit, Mathf.Infinity)) //Is player visible
+            {
+                if (hit.collider.gameObject.CompareTag("Player")) //If player is visible, chase it
+                {
+                    //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.yellow);
+                    PlayerHit(speed);
+                }
+                else if (!isAtLastPlayerPosition) //If player was visible, get close to where you last saw it
+                {
+                    LastSeenPos(speed);
+                }
+                else //Keep moving in the same direction
+                {
+                    //Debug.DrawRay(transform.position, transform.TransformDirection(player.position - transform.position) * hit.distance, Color.white);
+                    rigidbody.velocity = new Vector3(moveDir.x * speed, rigidbody.velocity.y, moveDir.y * speed);
+                }
+            }
+            //rigidbody.MovePosition(new Vector3(moveDir.x * moveSpeed, transform.position.y, moveDir.y * moveSpeed) + transform.position);
+        }
     }
 
     protected virtual void PlayerHit(float speed) //Go to player

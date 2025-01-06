@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class SaveData : MonoBehaviour
 {
-    public GameObject testCombat;
-    public Vector3 testCombatPos = new Vector3(0, 2.7f, 8.59f);
-    [SerializeField]
-    private bool isTestCombatDone = false;
+    public Transform player;
 
     [Space]
     public GameObject combatantData;
@@ -17,23 +14,14 @@ public class SaveData : MonoBehaviour
     [Space]
     public GameObject playerObject;
     public Vector3 playerPosition;
-    bool Bool = false;
+    bool isSceneChanged = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("I've been called again");
-		if (!isTestCombatDone)
-		{
-            Transform pos = this.transform;
-            pos.position = testCombatPos;
-            GameObject obj = Instantiate(testCombat, pos);
-            obj.transform.parent = null;
-		}
 		if (!isThereCombatantData)
 		{
             GameObject obj = Instantiate(combatantData, this.transform);
-            obj.transform.parent = null;
             isThereCombatantData = true;
 		}
     }
@@ -42,20 +30,18 @@ public class SaveData : MonoBehaviour
     void FixedUpdate()
     {
         playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null && Bool)
+        if (playerObject != null && isSceneChanged)
 		{
             playerObject.transform.position = playerPosition;
-            Bool = false;
+            isSceneChanged = false;
         }
 		else if (playerObject == null)
 		{
-            Bool = true;
+            isSceneChanged = true;
 		}
 		else
 		{
             playerPosition = playerObject.transform.position;
 		}
     }
-
-    public bool IsTestCombatDone { get => isTestCombatDone; set => isTestCombatDone = value; }
 }
