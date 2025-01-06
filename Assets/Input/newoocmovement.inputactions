@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "newoocmovement",
     "maps": [
         {
             "name": "oocgameplay",
@@ -16,12 +16,12 @@
                 },
                 {
                     "name": "move",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "ded5a9f3-19c2-4453-84af-36b940d21f01",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

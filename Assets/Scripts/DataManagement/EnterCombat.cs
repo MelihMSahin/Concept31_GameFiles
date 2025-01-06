@@ -35,9 +35,11 @@ public class EnterCombat : MonoBehaviour
         SceneManager.LoadScene("Combat");
     }
 
-    IEnumerator TouchScreenCompatability() //Adding touch to move would be a non-core feature, so just a skip for phones.
+	IEnumerator TouchScreenCompatability() //Adding touch to move would be a non-core feature, so just a skip for phones.
 	{
-        yield return new WaitForSecondsRealtime(30);
-        SceneManager.LoadScene("Combat", LoadSceneMode.Additive);
+        //yield return new WaitForSecondsRealtime(30);
+        //SceneManager.LoadScene("Combat", LoadSceneMode.Additive); No longer summons combat after 30 seconds
+		yield break; // Exits the coroutine 
 	}
+    
 }

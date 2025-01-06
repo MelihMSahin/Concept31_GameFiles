@@ -11,6 +11,7 @@ public class Combatant : MonoBehaviour
     protected string combatantName;
 
     public TextMeshProUGUI nameTextBox;
+    private Animator animator;
 
 	#region lvl variables
 	[Space]
@@ -78,6 +79,13 @@ public class Combatant : MonoBehaviour
 	void Awake()
     {
         RandomiseStats();
+    }
+    void start(){
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogWarning("Animator not found on " + gameObject.name);
+        }
     }
 
 	public void StartCombatant()
@@ -164,7 +172,7 @@ public class Combatant : MonoBehaviour
     public virtual void OnDeath()
 	{
         DestroyOnDeath();
-        GameObject.Destroy(gameObject, 0.4f);
+        GameObject.Destroy(gameObject, 2f);
     }
 
 	protected void DestroyOnDeath()
@@ -232,6 +240,11 @@ public class Combatant : MonoBehaviour
             health = 0;
             isAlive = false;
             return true;
+            //ANIMATION
+            if (animator != null)
+                {
+                animator.SetBool("Death", true); // Trigger death animation
+                }
 		}
         //Update the health bar
         return false;
