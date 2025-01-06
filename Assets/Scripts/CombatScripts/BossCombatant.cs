@@ -35,7 +35,7 @@ public class BossCombatant : Combatant
 
         int empowermentPoints = Random.Range(0, Mathf.FloorToInt(points / 5));
         points -= empowermentPoints;
-        empowermentValue = empowermentPoints * 2W;
+        empowermentValue = empowermentPoints * 2;
 
         healthMax = points;
         #region random empowerment type

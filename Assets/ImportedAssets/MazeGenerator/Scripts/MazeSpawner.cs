@@ -52,13 +52,7 @@ public class MazeSpawner : MonoBehaviour {
 		}
 		mMazeGenerator.GenerateMaze ();
 
-		int[] goalPos = { Random.Range(0, Rows), Random.Range(0, Columns) }; //Set the boss to summon in a random location
-		while (goalPos[0] == Rows/2 && goalPos[1] == Columns/2) //If goal spawns the same place as the player
-		{
-			//Rerandomise
-			goalPos[0] = Random.Range(0, Rows);
-			goalPos[1] = Random.Range(0, Columns); 
-		}
+		int[] goalPos = { Random.Range(1, Rows), Random.Range(1, Columns) }; //Set the boss to summon in a random location
 		
 
 		for (int row = 0; row < Rows; row++) {
@@ -104,9 +98,9 @@ public class MazeSpawner : MonoBehaviour {
 				}
 
 				//Randomly spawn enemies
-				if (Random.Range(0,100) > 90)
+				if (Random.Range(0,100) > 80)
 				{
-					if (column != Columns/2 && row != Rows / 2) //Make sure enemies don't spawn at the same place as the player
+					if (column != 0 && row != 0) //Make sure enemies don't spawn at the same place as the player
 					{
 						cell.IsEnemy = true;
 						if (cell.IsEnemy && EnemyPrefab != null && !cell.IsGoal)

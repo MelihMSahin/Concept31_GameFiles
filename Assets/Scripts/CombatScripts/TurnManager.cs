@@ -141,7 +141,6 @@ public class TurnManager : MonoBehaviour
 		{
 			if (!(combatantsArray[i] is PlayerCombatant))
 			{
-
 				TextMeshProUGUI tmp = targetButtons[j].GetComponentInChildren<TextMeshProUGUI>();
 				tmp.text = "Attack: " + combatantsArray[i].CombatantName;
 				j += 1;
@@ -236,8 +235,15 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			SaveCombatants();
-			endText.text = "Congratulations! You won!";
-			StartCoroutine("ExitCombat");
+			if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("BossCombat"))
+			{
+				endText.text = "You have won!!!";
+			}
+			else
+			{
+				endText.text = "Congratulations! You survived!";
+				StartCoroutine(ExitCombat());
+			}
 		}
 
 		if (turnState == TurnState.LOST)
@@ -245,7 +251,6 @@ public class TurnManager : MonoBehaviour
 			canvas.gameObject.SetActive(false);
 			endCanvas.gameObject.SetActive(true);
 			endText.text = "You lost.";
-			StartCoroutine("ExitCombat");
 		}
 		#endregion
 	}
@@ -253,8 +258,9 @@ public class TurnManager : MonoBehaviour
 	#region Game Won/Lost
 	IEnumerator ExitCombat()
 	{
-		yield return new WaitForSecondsRealtime(2f);
-		SceneManager.LoadScene("Out-Of-Combat");
+		SaveCombatants();
+		yield return new WaitForSecondsRealtime(1f);
+		SceneManager.LoadScene("Maze");
 	}
 	private void SaveCombatants() //To allow the stats of player combatants to keep existing until the end of the game.
 	{

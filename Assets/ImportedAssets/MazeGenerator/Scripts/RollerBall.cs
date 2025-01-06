@@ -114,10 +114,15 @@ public class RollerBall : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Enemy"))
 		{
+			Destroy(other);
+			GameObject maze = GameObject.FindGameObjectWithTag("Maze");
+			DontDestroyOnLoad(maze);
 			SceneManager.LoadScene("Combat");
 		}
 		else if (other.CompareTag("Boss"))
 		{
+			GameObject maze = GameObject.FindGameObjectWithTag("Maze");
+			DontDestroyOnLoad(maze);
 			SceneManager.LoadScene("BossCombat");
 		}
 		/*

@@ -31,7 +31,6 @@ public class EnterCombat : MonoBehaviour
     {
 		DontDestroyOnLoad(combatantData);
 		DontDestroyOnLoad(data.gameObject);
-		data.IsTestCombatDone = true;
         SceneManager.LoadScene("Combat");
     }
 
